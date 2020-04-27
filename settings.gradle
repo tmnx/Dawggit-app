@@ -1,0 +1,2 @@
+rootProject.name='Dawggit'
+include ':app'
