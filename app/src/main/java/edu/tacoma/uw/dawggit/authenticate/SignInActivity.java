@@ -269,9 +269,9 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
                     finish();
                 }
                 else {
-                    mSharedPreferences
-                            .edit()
-                            .remove(getString(R.string.USER_EMAIL)).apply();
+//                    mSharedPreferences
+//                            .edit()
+//                            .remove(getString(R.string.USER_EMAIL)).apply();
                     Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     Log.d("LOGIN", jsonObject.getString("message"));
                 }
