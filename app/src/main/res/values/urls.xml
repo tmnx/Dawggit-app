@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="post_login">https://dawggit.herokuapp.com/login</string>
+    <string name="post_register">https://dawggit.herokuapp.com/register</string>
+</resources>

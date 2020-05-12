@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="LOGIN_PREFS">edu.tacoma.uw.dawggit</string>
+    <string name="LOGGEDIN">loggedin</string>
+    <string name="USER_EMAIL">email</string>
+</resources>
