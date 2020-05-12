@@ -2,5 +2,16 @@
     <string name="app_name">Dawggit</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dawggit_logo">Dawggit Logo</string>
-
+    <string name="tab_text_1">Home</string>
+    <string name="tab_text_2">Forum</string>
+    <string name="tab_text_3">Listings</string>
+    <string name="tab_text_4">Review</string>
+    <string name="tab_text_5">Settings</string>
+    <string name="home_text">Welcome to the Home Page</string>
+    <string name="home_text_2">Updates will be displayed here</string>
+    <string name="add_post">New Post</string>
+    <string name="forum">Forum Posts</string>
+    <string name="post_title">Enter the Title of Your Post</string>
+    <string name="text_content">Forum Body</string>
+    <string name="post_reply">Reply</string>
 </resources>

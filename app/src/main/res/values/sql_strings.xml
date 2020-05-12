@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources><string name="CREATE_THREAD_SQL">
+    CREATE TABLE IF NOT EXISTS THREAD
+    (thread_id TEXT PRIMARY KEY, title TEXT,
+    content TEXT, date_created TEXT, email TEXT)
+</string>
+
+    <string name="DROP_THREAD_SQL">
+    DROP TABLE IF EXISTS THREAD
+</string>
+</resources>
