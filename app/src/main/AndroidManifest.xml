@@ -11,6 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".main.HomeActivity"/>
+        <activity android:name=".forum.ForumDisplayActivity"></activity>
+        <activity android:name=".forum.ForumAddActivity"></activity>
         <activity android:name=".authenticate.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

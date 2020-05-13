@@ -2,4 +2,6 @@
 <resources>
     <string name="post_login">https://dawggit.herokuapp.com/login</string>
     <string name="post_register">https://dawggit.herokuapp.com/register</string>
+    <string name = "get_threads"> https://dawggit.herokuapp.com/threads</string>
+    <string name = "add_thread"> https://dawggit.herokuapp.com/addthread</string>
 </resources>
