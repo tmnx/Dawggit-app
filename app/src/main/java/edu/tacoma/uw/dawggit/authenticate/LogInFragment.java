@@ -1,10 +1,13 @@
 package edu.tacoma.uw.dawggit.authenticate;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import edu.tacoma.uw.dawggit.MainActivity;
 import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.main.HomeActivity;
+import edu.tacoma.uw.dawggit.main.HomeFragment;
 
 /**
  * This fragment is responsible for displaying and retrieving login information.
@@ -21,6 +35,12 @@ import edu.tacoma.uw.dawggit.R;
  * create an instance of this fragment.
  */
 public class LogInFragment extends Fragment {
+
+
+
+
+
+    private FirebaseAuth mAuth;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -62,6 +82,12 @@ public class LogInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        mAuth = FirebaseAuth.getInstance();
+
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -104,8 +130,39 @@ public class LogInFragment extends Fragment {
                     passwordText.requestFocus();
                 }
                 else {
-                    mLoginFragmentListener.login(emailText.getText().toString(),
-                            passwordText.getText().toString());
+
+                    mAuth.signInWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
+                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    // if account has been created.
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getContext(),"successful login",Toast.LENGTH_SHORT).show();
+                                        FirebaseUser user = mAuth.getCurrentUser();
+
+                                        // if email is verified, go to next activity.
+                                        if (user.isEmailVerified()) {
+
+
+
+
+
+                                            mLoginFragmentListener.login(emailText.getText().toString(),
+                                                    passwordText.getText().toString());
+                                        } else { // login is successful, but account is not verified.
+                                            Toast.makeText(getContext(), "Please verify account with email", Toast.LENGTH_SHORT).show();
+                                        }
+                                        // if sign in fails, display message to the user
+                                    } else {
+                                        Log.w("login", "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(getContext(), "" + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+
+
+
                 }
             }
         });
