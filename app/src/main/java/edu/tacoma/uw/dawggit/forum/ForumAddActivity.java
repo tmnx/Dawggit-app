@@ -25,11 +25,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Activity for adding a forum post to the database
+ * @author Sean Smith
+ * @version Sprint1
+ */
 public class ForumAddActivity extends AppCompatActivity {
-
+    /**
+     * String to reference this activity
+     */
     public static final String ADD_FORUM = "ADD_FORUM";
+    /**
+     * OBject containing list of forums as JSON
+     */
     private JSONObject mForumJSON;
     @Override
+    /**
+     * Initializes the properties for all of the buttons and text.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_add);
@@ -55,6 +68,10 @@ public class ForumAddActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adds a forum to the database using a post request
+     * @param forum Forum being added to the database
+     */
     public void addForum(Forum forum) {
         StringBuilder url = new StringBuilder(getString(R.string.add_thread));
         mForumJSON = new JSONObject();
@@ -70,8 +87,16 @@ public class ForumAddActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Class that is used to get the list of threads from the database
+     * @author Sean
+     * @version Sprint1
+     */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
         @Override
+        /**
+         * Trys to poll the database and get information as json
+         */
         protected String doInBackground(String... urls) {
             String response = "";
             HttpURLConnection urlConnection = null;
@@ -110,6 +135,10 @@ public class ForumAddActivity extends AppCompatActivity {
             return response;
         }
 
+        /**
+         * Attempts to create a json object if it false a toast is displayed
+         * @param s String returned by get request used to create json object.
+         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to add the new post")) {

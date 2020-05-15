@@ -11,13 +11,14 @@ import android.view.ViewGroup;
 import edu.tacoma.uw.dawggit.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment Home page for the application
+ * @version Sprint 1
+ * @author Sean Smith
  */
 public class HomeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    /**
+     *
+     */
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -28,7 +29,6 @@ public class HomeFragment extends Fragment {
      *
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -37,13 +37,13 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
-
+    /**
+     *
+     * @param inflater Required object to generate a view.
+     * @param container Required object to generate a view.
+     * @param savedInstanceState Used to save the state.
+     * @return Generated view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
