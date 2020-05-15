@@ -16,4 +16,10 @@
     <string name="post_reply">Reply</string>
     <string name="reviewHint">Leave a review</string>
     <string name="course_review">Course Reviews</string>
+    <string name="addcommentButton">Add Comment</string>
+    <string name="hintCommentBox">Leave a comment</string>
+    <string name="addCourseReview">Add Course</string>
+    <string name="hintCourseID">Enter the Course Code</string>
+    <string name="hintCourseTitle">Enter the Title of the Course</string>
+    <string name="hintCourseInfo">Enter the Course Information</string>
 </resources>

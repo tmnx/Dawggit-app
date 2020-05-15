@@ -12,7 +12,5 @@
 /captures
 .externalNativeBuild
 .cxx
-/app/src/main/java/edu/tacoma/uw/dawggit/main/CourseReviewFragment.java
+/app/src/main/java/edu/tacoma/uw/dawggit/review/
 /app/src/main/res/layout/activity_review_add.xml
-/app/src/main/res/layout/fragment_course_review.xml
-/app/src/main/java/edu/tacoma/uw/dawggit/course/Course.java
