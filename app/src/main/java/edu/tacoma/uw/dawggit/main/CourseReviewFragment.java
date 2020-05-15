@@ -31,8 +31,6 @@ import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.course.Course;
 import edu.tacoma.uw.dawggit.course.CourseAddActivity;
 import edu.tacoma.uw.dawggit.course.CourseDB;
-import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
-import edu.tacoma.uw.dawggit.review.ReviewDB;
 
 /**
  * A simple {@link Fragment} subclass.
