@@ -43,7 +43,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             //Reviews here
         }
         else if(position == 4) {
-            //Settings here
+            return SettingFragment.newInstance();
+
         }
         return HomeFragment.newInstance();
     }
