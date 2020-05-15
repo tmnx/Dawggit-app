@@ -13,11 +13,19 @@ import edu.tacoma.uw.dawggit.R;
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
+ * @author Sean Smith
+ * @version Sprint1
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    /**
+     * Titles for each tab
+     */
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3, R.string.tab_text_4, R.string.tab_text_5};
+    /**
+     * Required context of this object.
+     */
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -26,6 +34,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     }
 
+    /**
+     * Returns the fragment for each position
+     * @param position Tab that is being generated
+     * @return A new instance of a fragment
+     */
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -41,6 +54,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
         else if(position == 3) {
             //Reviews here
+            return CourseReviewFragment.newInstance();
         }
         else if(position == 4) {
             return SettingFragment.newInstance();
@@ -49,12 +63,21 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return HomeFragment.newInstance();
     }
 
+    /**
+     * Returns name of each tab
+     * @param position Position of tab being requested.
+     * @return Name of tab being requested.
+     */
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
         return mContext.getResources().getString(TAB_TITLES[position]);
     }
 
+    /**
+     * Returns count of all tabs
+     * @return Number of tabs.
+     */
     @Override
     public int getCount() {
         // Show 5 total pages.

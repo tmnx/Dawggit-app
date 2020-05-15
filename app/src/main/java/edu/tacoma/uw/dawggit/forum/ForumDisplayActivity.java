@@ -3,16 +3,40 @@ package edu.tacoma.uw.dawggit.forum;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.comment.CommentAddActivity;
+import edu.tacoma.uw.dawggit.comment.CommentsContent;
 
+/**
+ * Activity that displays a forum post
+ * @author Sean Smith
+ * @version Sprint1
+ */
 public class ForumDisplayActivity extends AppCompatActivity {
+    /**
+     * Item ID used for this activity.
+     */
     public static final String ARG_ITEM_ID = "item_id";
+    /**
+     * Thread ID for this forum
+     */
+    public String mThreadID;
+    /**
+     * Forum being displayed by this activity.
+     */
     private Forum mForum;
+
+    /**
+     * Sets up this activity and initalizes all of the text boxes
+     * @param savedInstanceState State required by parent class
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,5 +61,35 @@ public class ForumDisplayActivity extends AppCompatActivity {
             }
         });
 
+        Button replyButton = (Button) findViewById(R.id.replyButton);
+        replyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ForumDisplayActivity.this,
+                                        CommentAddActivity.class);
+                i.putExtra("thread_id", mForum.getThreadId());
+                startActivity(i);
+            }
+        }) ;
+
+        Button viewRepButton = (Button) findViewById(R.id.viewRepliesButton);
+        viewRepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ForumDisplayActivity.this,
+                                        CommentsContent.class);
+                i.putExtra("thread_id", mForum.getThreadId());
+                startActivity(i);
+            }
+        });
+
     }
+
+//    public void createComment(Bundle savedInstanceState) {
+//        Intent i = new Intent(this, CommentAddActivity.class);
+//        startActivity(i);
+//    }
+
+
+
 }

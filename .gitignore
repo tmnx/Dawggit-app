@@ -12,3 +12,5 @@
 /captures
 .externalNativeBuild
 .cxx
+/app/src/main/java/edu/tacoma/uw/dawggit/review/
+/app/src/main/res/layout/activity_review_add.xml

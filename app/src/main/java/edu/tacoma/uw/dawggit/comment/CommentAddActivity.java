@@ -1,15 +1,15 @@
-package edu.tacoma.uw.dawggit.forum;
+package edu.tacoma.uw.dawggit.comment;
 
 import androidx.appcompat.app.AppCompatActivity;
-import edu.tacoma.uw.dawggit.R;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -21,82 +21,67 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
-/**
- * Activity for adding a forum post to the database
- * @author Sean Smith
- * @version Sprint1
- */
-public class ForumAddActivity extends AppCompatActivity {
-    /**
-     * String to reference this activity
-     */
-    public static final String ADD_FORUM = "ADD_FORUM";
-    /**
-     * OBject containing list of forums as JSON
-     */
-    private JSONObject mForumJSON;
+import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.forum.Forum;
+import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
+
+public class CommentAddActivity extends AppCompatActivity {
+
+    public static final String ADD_COMMENT = "ADD_COMMENT";
+    private JSONObject mCommentJSON;
+
     @Override
-    /**
-     * Initializes the properties for all of the buttons and text.
-     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forum_add);
-        Button addButton = findViewById(R.id.post);
-        ImageButton finishButton = findViewById(R.id.finish);
-        final EditText title = findViewById(R.id.post_title);
-        final EditText text = findViewById(R.id.forum_body);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_comment_add);
+
+        ImageView finishButton = findViewById(R.id.closeAddComment);
+        final EditText commentText = findViewById(R.id.commentBox);
+        Button addCommentButton = findViewById(R.id.new_commentButton);
+
+        Intent i = this.getIntent();
+        final String thread_id = i.getStringExtra("thread_id");
+
+        Log.e("Testing thread id", thread_id);
+
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String threadTitle = title.getText().toString();
-                String threadContent = text.getText().toString();
-                Forum forum = new Forum(threadTitle, threadContent, "temp@uw.edu");
-                addForum(forum);
+                String email = "tmn1014@uw.edu";
+                String content = commentText.getText().toString();
+                Comment comment = new Comment(email, thread_id, content);
+                addComment(comment);
                 finish();
             }
         });
+
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
     }
 
-    /**
-     * Adds a forum to the database using a post request
-     * @param forum Forum being added to the database
-     */
-    public void addForum(Forum forum) {
-        StringBuilder url = new StringBuilder(getString(R.string.add_thread));
-        mForumJSON = new JSONObject();
+    public void addComment(Comment comment) {
+        StringBuilder url = new StringBuilder(getString(R.string.add_comment));
+        mCommentJSON = new JSONObject();
 
         try {
-            mForumJSON.put(Forum.TITLE, forum.getTitle());
-            mForumJSON.put(Forum.CONTENT, forum.getContent());
-            mForumJSON.put(Forum.EMAIL, forum.getEmail());
-            new AddCourseAsyncTask().execute(url.toString());
+            mCommentJSON.put(Comment.EMAIL, comment.getEmail());
+            mCommentJSON.put(Comment.THREAD_ID, comment.getThread_id());
+            mCommentJSON.put(Comment.CONTENT, comment.getContent());
+            new CommentAddActivity.AddCourseAsyncTask().execute(url.toString());
         }
         catch(JSONException e) {
             Toast.makeText(this, "Error with JSON creation on adding a course:" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    /**
-     * Class that is used to get the list of threads from the database
-     * @author Sean
-     * @version Sprint1
-     */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
         @Override
-        /**
-         * Trys to poll the database and get information as json
-         */
         protected String doInBackground(String... urls) {
             String response = "";
             HttpURLConnection urlConnection = null;
@@ -111,8 +96,8 @@ public class ForumAddActivity extends AppCompatActivity {
                             new OutputStreamWriter(urlConnection.getOutputStream());
 
                     // For Debugging
-                    Log.i(ADD_FORUM, mForumJSON.toString());
-                    wr.write(mForumJSON.toString());
+                    Log.i(ADD_COMMENT, mCommentJSON.toString());
+                    wr.write(mCommentJSON.toString());
                     wr.flush();
                     wr.close();
 
@@ -135,10 +120,6 @@ public class ForumAddActivity extends AppCompatActivity {
             return response;
         }
 
-        /**
-         * Attempts to create a json object if it false a toast is displayed
-         * @param s String returned by get request used to create json object.
-         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to add the new post")) {
@@ -155,13 +136,13 @@ public class ForumAddActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Post couldn't be added: "
                                     + jsonObject.getString("error")
                             , Toast.LENGTH_LONG).show();
-                    Log.e(ADD_FORUM, jsonObject.getString("error"));
+                    Log.e(ADD_COMMENT, jsonObject.getString("error"));
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "JSON Parsing error on Adding post"
                                 + e.getMessage()
                         , Toast.LENGTH_LONG).show();
-                Log.e(ADD_FORUM, e.getMessage());
+                Log.e(ADD_COMMENT, e.getMessage());
             }
         }
     }
