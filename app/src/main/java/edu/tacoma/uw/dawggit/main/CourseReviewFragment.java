@@ -52,7 +52,6 @@ public class CourseReviewFragment extends Fragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CourseReviewFragment newInstance() {
         CourseReviewFragment fragment = new CourseReviewFragment();
         Bundle args = new Bundle();

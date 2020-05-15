@@ -14,11 +14,29 @@ import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.comment.CommentAddActivity;
 import edu.tacoma.uw.dawggit.comment.CommentsContent;
 
+/**
+ * Activity that displays a forum post
+ * @author Sean Smith
+ * @version Sprint1
+ */
 public class ForumDisplayActivity extends AppCompatActivity {
+    /**
+     * Item ID used for this activity.
+     */
     public static final String ARG_ITEM_ID = "item_id";
+    /**
+     * Thread ID for this forum
+     */
     public String mThreadID;
-
+    /**
+     * Forum being displayed by this activity.
+     */
     private Forum mForum;
+
+    /**
+     * Sets up this activity and initalizes all of the text boxes
+     * @param savedInstanceState State required by parent class
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
