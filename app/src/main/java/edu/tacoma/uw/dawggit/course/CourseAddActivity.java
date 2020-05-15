@@ -1,7 +1,6 @@
-package edu.tacoma.uw.dawggit.forum;
+package edu.tacoma.uw.dawggit.course;
 
 import androidx.appcompat.app.AppCompatActivity;
-import edu.tacoma.uw.dawggit.R;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -21,52 +20,65 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
-public class ForumAddActivity extends AppCompatActivity {
+import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.forum.Forum;
+import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
+import edu.tacoma.uw.dawggit.main.CourseReviewFragment;
 
-    public static final String ADD_FORUM = "ADD_FORUM";
-    private JSONObject mForumJSON;
+public class CourseAddActivity extends AppCompatActivity {
+
+//    public static final String ARG_ITEM_ID = "item_id";
+
+    public static final String ADD_COURSE = "ADD COURSE";
+
+    private JSONObject mCourseJSON;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forum_add);
-        Button addButton = findViewById(R.id.post);
-        ImageButton finishButton = findViewById(R.id.finish);
-        final EditText title = findViewById(R.id.post_title);
-        final EditText text = findViewById(R.id.forum_body);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_course_add);
+
+        ImageView closeButton = findViewById(R.id.closeAddCourse);
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String threadTitle = title.getText().toString();
-                String threadContent = text.getText().toString();
-                Forum forum = new Forum(threadTitle, threadContent, "temp@uw.edu");
-                addForum(forum);
                 finish();
             }
         });
-        finishButton.setOnClickListener(new View.OnClickListener() {
+
+        final EditText CIDtext = findViewById(R.id.editCourseID);
+        final EditText titleText = findViewById(R.id.editCourseTitle);
+        final EditText infoText = findViewById(R.id.editCourseInfo);
+
+        Button addButton = findViewById(R.id.addCourse);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String course_code = CIDtext.getText().toString();
+                String title = titleText.getText().toString();
+                String info = infoText.getText().toString();
+                Course course = new Course(course_code, title, info, "tmn1014@uw.edu");
+                addCourse(course);
                 finish();
             }
         });
     }
 
-    public void addForum(Forum forum) {
-        StringBuilder url = new StringBuilder(getString(R.string.add_thread));
-        mForumJSON = new JSONObject();
+    public void addCourse(Course course) {
+        StringBuilder url = new StringBuilder(getString(R.string.add_course));
+        mCourseJSON = new JSONObject();
 
         try {
-            mForumJSON.put(Forum.TITLE, forum.getTitle());
-            mForumJSON.put(Forum.CONTENT, forum.getContent());
-            mForumJSON.put(Forum.EMAIL, forum.getEmail());
+            mCourseJSON.put(Course.COURSEID, course.getCourse_code());
+            mCourseJSON.put(Course.TITLE, course.getTitle());
+            mCourseJSON.put(Course.INFO, course.getCourse_info());
+            mCourseJSON.put(Course.EMAIL, course.getEmail());
             new AddCourseAsyncTask().execute(url.toString());
         }
         catch(JSONException e) {
-            Toast.makeText(this, "Error with JSON creation on adding a course:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error with JSON creation on adding a course:"
+                    + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -86,8 +98,8 @@ public class ForumAddActivity extends AppCompatActivity {
                             new OutputStreamWriter(urlConnection.getOutputStream());
 
                     // For Debugging
-                    Log.i(ADD_FORUM, mForumJSON.toString());
-                    wr.write(mForumJSON.toString());
+                    Log.i(ADD_COURSE, mCourseJSON.toString());
+                    wr.write(mCourseJSON.toString());
                     wr.flush();
                     wr.close();
 
@@ -126,13 +138,13 @@ public class ForumAddActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Post couldn't be added: "
                                     + jsonObject.getString("error")
                             , Toast.LENGTH_LONG).show();
-                    Log.e(ADD_FORUM, jsonObject.getString("error"));
+                    Log.e(ADD_COURSE, jsonObject.getString("error"));
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "JSON Parsing error on Adding post"
                                 + e.getMessage()
                         , Toast.LENGTH_LONG).show();
-                Log.e(ADD_FORUM, e.getMessage());
+                Log.e(ADD_COURSE, e.getMessage());
             }
         }
     }
