@@ -14,4 +14,6 @@
     <string name="post_title">Enter the Title of Your Post</string>
     <string name="text_content">Forum Body</string>
     <string name="post_reply">Reply</string>
+    <string name="reviewHint">Leave a review</string>
+    <string name="course_review">Course Reviews</string>
 </resources>

@@ -44,6 +44,8 @@ public class ForumFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ForumDb mForumDB;
 
+
+
     public ForumFragment() {
         // Required empty public constructor
     }

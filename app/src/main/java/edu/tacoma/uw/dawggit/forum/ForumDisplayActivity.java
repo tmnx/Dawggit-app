@@ -3,15 +3,21 @@ package edu.tacoma.uw.dawggit.forum;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.comment.CommentAddActivity;
+import edu.tacoma.uw.dawggit.comment.CommentsContent;
 
 public class ForumDisplayActivity extends AppCompatActivity {
     public static final String ARG_ITEM_ID = "item_id";
+    public String mThreadID;
+
     private Forum mForum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,5 +43,35 @@ public class ForumDisplayActivity extends AppCompatActivity {
             }
         });
 
+        Button replyButton = (Button) findViewById(R.id.replyButton);
+        replyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ForumDisplayActivity.this,
+                                        CommentAddActivity.class);
+                i.putExtra("thread_id", mForum.getThreadId());
+                startActivity(i);
+            }
+        }) ;
+
+        Button viewRepButton = (Button) findViewById(R.id.viewRepliesButton);
+        viewRepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ForumDisplayActivity.this,
+                                        CommentsContent.class);
+                i.putExtra("thread_id", mForum.getThreadId());
+                startActivity(i);
+            }
+        });
+
     }
+
+//    public void createComment(Bundle savedInstanceState) {
+//        Intent i = new Intent(this, CommentAddActivity.class);
+//        startActivity(i);
+//    }
+
+
+
 }
