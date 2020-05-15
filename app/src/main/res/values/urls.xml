@@ -7,4 +7,6 @@
     <string name = "add_review">https://dawggit.herokuapp.com/addreview</string>
     <string name="add_comment">https://dawggit.herokuapp.com/addcomment</string>
     <string name="get_comments">https://dawggit.herokuapp.com/comments?thread_id=</string>
+    <string name="add_course">https://dawggit.herokuapp.com/addcourse</string>
+    <string name="get_courses">https://dawggit.herokuapp.com/courses</string>
 </resources>

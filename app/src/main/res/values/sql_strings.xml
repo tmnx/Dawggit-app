@@ -31,4 +31,13 @@
         PRIMARY KEY(email, thread_id, date_posted))
     </string>
 
+    <string name="CREATE_COURSE_SQL">
+        CREATE TABLE IF NOT EXISTS COURSE
+        (course_code TEXT PRIMARY KEY, title TEXT, course_info TEXT, email TEXT)
+    </string>
+
+    <string name="DROP_COURSE_SQL">
+        DROP TABLE IF EXISTS COURSE
+    </string>
+
 </resources>
