@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources><string name="CREATE_THREAD_SQL">
+<resources>
+    <string name="CREATE_THREAD_SQL">
     CREATE TABLE IF NOT EXISTS THREAD
     (thread_id TEXT PRIMARY KEY, title TEXT,
     content TEXT, date_created TEXT, email TEXT)
-</string>
+    </string>
 
     <string name="DROP_THREAD_SQL">
     DROP TABLE IF EXISTS THREAD
-</string>
+    </string>
+
+    <string name="DROP_REVIEW_SQL">
+        DROP TABLE IF EXISTS REVIEWS
+    </string>
+
+    <string name="CREATE_REVIEW_SQL">
+        CREATE TABLE IF NOT EXISTS REVIEWS
+        (email TEXT, course_code TEXT, date_posted TEXT,
+        content TEXT, PRIMARY KEY(email, course_code))
+    </string>
+
+    <string name="DROP_COMMENTS_SQL">
+        DROP TABLE IF EXISTS COMMENTS
+    </string>
+
+    <string name="CREATE_COMMENTS_SQL">
+        CREATE TABLE IF NOT EXISTS COMMENTS
+        (email TEXT, thread_id TEXT, date_posted TEXT, content TEXT,
+        PRIMARY KEY(email, thread_id, date_posted))
+    </string>
+
 </resources>

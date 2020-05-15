@@ -41,6 +41,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
         else if(position == 3) {
             //Reviews here
+            return CourseReviewFragment.newInstance();
         }
         else if(position == 4) {
             //Settings here
