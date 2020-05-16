@@ -6,12 +6,14 @@ import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
-
 import edu.tacoma.uw.dawggit.main.SectionsPagerAdapter;
 
 import android.os.Bundle;
 import edu.tacoma.uw.dawggit.R;
 
+/**
+ * Parent for tabs/tab fragments
+ */
 public class HomeActivity extends AppCompatActivity {
 
     @Override

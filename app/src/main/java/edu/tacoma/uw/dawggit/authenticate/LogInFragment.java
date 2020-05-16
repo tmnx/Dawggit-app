@@ -39,7 +39,7 @@ public class LogInFragment extends Fragment {
 
 
 
-
+    /**Used for firebase authorization.*/
     private FirebaseAuth mAuth;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -79,6 +79,10 @@ public class LogInFragment extends Fragment {
     }
 
 
+    /**
+     * Initializes firebase
+     * @param savedInstanceState null
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,10 +163,6 @@ public class LogInFragment extends Fragment {
                                     }
                                 }
                             });
-
-
-
-
                 }
             }
         });

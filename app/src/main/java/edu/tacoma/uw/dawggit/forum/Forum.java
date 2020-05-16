@@ -85,7 +85,7 @@ public class Forum implements Serializable {
         this.title = aTitle;
         this.content = aContent;
         this.date = "temp";
-        this.email = "smith17@uw.edu";
+        this.email = aUser;
     }
 
     /**
