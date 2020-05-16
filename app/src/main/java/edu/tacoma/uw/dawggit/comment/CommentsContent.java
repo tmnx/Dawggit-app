@@ -67,6 +67,9 @@ public class CommentsContent extends AppCompatActivity {
 
     }
 
+    /**
+     * Connect to db and refresh view.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -119,6 +122,10 @@ public class CommentsContent extends AppCompatActivity {
      */
     private class CoursesTask extends AsyncTask<String, Void, String> {
 
+       /**
+        * Connect to remote database.
+        * @param urls urls strings
+        */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -149,6 +156,10 @@ public class CommentsContent extends AppCompatActivity {
 
         }
 
+        /**
+         * Check if post is added successfully or not.
+         * @param s JSON string.
+         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to")) {
