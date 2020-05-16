@@ -57,21 +57,20 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
         setContentView(R.layout.activity_sign_in);
 
         mAuth = FirebaseAuth.getInstance();
+        mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
 
         if (mAuth.getCurrentUser() != null) {
             // User is signed in (getCurrentUser() will be null if not signed in)
+            mSharedPreferences.edit()
+                    .putString(getString(R.string.USER_EMAIL),
+                            mAuth.getCurrentUser().getEmail()).commit();
+            String prefEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
+            String email = mAuth.getCurrentUser().getEmail();
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
             finish();
 
         }
-
-
-
-
-
-
-
         SharedPreferences sharedPreferences =
                 getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
         sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN), false)
@@ -80,20 +79,6 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.sign_in_fragment_id, new LogInFragment())
                 .commit();
-
-        //Commented out for testing purposes.
-//        mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS),
-//                Context.MODE_PRIVATE);
-//        if(!mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.sign_in_fragment_id, new LogInFragment())
-//                    .commit();
-//        }
-//        else {
-//            Intent intent = new Intent(this, HomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
     }
 
 
@@ -113,10 +98,10 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
         try {
             mUserJSON.put("email", email);
             mUserJSON.put("password", pwd);
-//            mSharedPreferences
-//                    .edit()
-//                    .putString(getString(R.string.USER_EMAIL), email)
-//                    .apply();
+            mSharedPreferences
+                    .edit()
+                    .putString(getString(R.string.USER_EMAIL), email)
+                    .apply();
             new LoginAsyncTask().execute(url.toString());
         } catch(JSONException e) {
             Toast.makeText(this, "Error with JSON creation on logging in"
