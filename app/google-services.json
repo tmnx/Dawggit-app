@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "686267088280",
+    "firebase_url": "https://dawggit-dc38d.firebaseio.com",
+    "project_id": "dawggit-dc38d",
+    "storage_bucket": "dawggit-dc38d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686267088280:android:db31e6ca3fe97341817fed",
+        "android_client_info": {
+          "package_name": "edu.tacoma.uw.dawggit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "686267088280-6p21tgoe6k7cn21vhnu60fia839k3a5q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.tacoma.uw.dawggit",
+            "certificate_hash": "3dcd835f455aa2e75c11d83f4251a98b39aa05fc"
+          }
+        },
+        {
+          "client_id": "686267088280-momq0jfe665cf5tcmoe7h9dha2qs404g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZMSf5GRw8ymFodevl3nohEBIO1OIxogs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "686267088280-momq0jfe665cf5tcmoe7h9dha2qs404g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

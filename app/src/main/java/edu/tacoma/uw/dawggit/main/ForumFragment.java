@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -34,9 +35,9 @@ import edu.tacoma.uw.dawggit.forum.ForumDb;
 import edu.tacoma.uw.dawggit.forum.ForumDisplayActivity;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
+* Displays forum posts to a user.
+ * @author Sean Smith
+ * @version Sprint 1
  */
 public class ForumFragment extends Fragment {
     private boolean mTwoPane;
@@ -45,7 +46,9 @@ public class ForumFragment extends Fragment {
     private ForumDb mForumDB;
 
 
-
+    /**
+     *
+     */
     public ForumFragment() {
         // Required empty public constructor
     }
@@ -53,9 +56,8 @@ public class ForumFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment HomeFragment.
+     * @return A new instance of fragment Forum Fragment
      */
-    // TODO: Rename and change types and number of parameters
     public static ForumFragment newInstance() {
         ForumFragment fragment = new ForumFragment();
         Bundle args = new Bundle();
@@ -64,6 +66,10 @@ public class ForumFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Used to change the behavior of the base on create
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +78,13 @@ public class ForumFragment extends Fragment {
 
     }
 
+    /**
+     * Chanes the behavior of on create view so we can add buttons
+     * @param inflater Used to create a view
+     * @param container View group of this object
+     * @param savedInstanceState Saved state of the instance
+     * @return View that has been created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,6 +92,7 @@ public class ForumFragment extends Fragment {
         mRecyclerView = ve.findViewById(R.id.item_list);
         assert mRecyclerView != null;
         setupRecyclerView((RecyclerView) mRecyclerView);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         Button addButton = ve.findViewById(R.id.new_post);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +103,9 @@ public class ForumFragment extends Fragment {
         return ve;
     }
 
+    /**
+     * Overrides on resume so the database is queried whenever something is added
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -112,23 +129,46 @@ public class ForumFragment extends Fragment {
             if (mForumList == null) {
                 mForumList = mForumDB.getThreads();
                 setupRecyclerView(mRecyclerView);
+                if(mRecyclerView != null) {
+                    mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+                }
 
             }
         }
     }
 
-
+    /**
+     * Sets up the recycler view using the list of forums
+     * @param recyclerView Recycle view that is being set up.
+     */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         if(mForumList != null) {
             recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((HomeActivity) getActivity(), mForumList, mTwoPane));
         }
     }
+
+    /**
+     * Simple Recycle View class
+     * @author Sean Smith
+     * @version Sprint 1
+     */
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
+        /**
+         * Parent of this activity
+         */
         private final HomeActivity mParentActivity;
+        /**
+         * List of forum postings
+         */
         private final List<Forum> mValues;
+        /**
+         * Whether the screen is two pane or not
+         */
         private final boolean mTwoPane;
+        /**
+         * Sets up the listener for each forum item
+         */
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,6 +199,12 @@ public class ForumFragment extends Fragment {
             mTwoPane = twoPane;
         }
 
+        /**
+         * Generates a view holder
+         * @param parent Parent of the view holder
+         * @param viewType Type of view.
+         * @return Created view holder
+         */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
@@ -166,6 +212,11 @@ public class ForumFragment extends Fragment {
             return new ViewHolder(view);
         }
 
+        /**
+         * Sets up the text and listeners
+         * @param holder Used to reference each list item.
+         * @param position Position of each list item.
+         */
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mIdView.setText(mValues.get(position).getTitle());
@@ -174,11 +225,20 @@ public class ForumFragment extends Fragment {
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
+        /**
+         * Returns the number of items
+         * @return Number of items
+         */
         @Override
         public int getItemCount() {
             return mValues.size();
         }
 
+        /**
+         * Class used to generate the list of forum posts
+         * @author Sean Smith
+         * @version Sprint1
+         */
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
             final TextView mContentView;
@@ -190,7 +250,16 @@ public class ForumFragment extends Fragment {
             }
         }
     }
+
+    /**
+     * Asynchronous class used to contact the web to perform a get request
+     */
     private class CoursesTask extends AsyncTask<String, Void, String> {
+        /**
+         * Attempts to connect to the database via a get request then returns a string containing JSON
+         * @param urls URL the of the database
+         * @return JSON retrieved from the database.
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -221,6 +290,10 @@ public class ForumFragment extends Fragment {
 
         }
 
+        /**
+         * Loads the forum fragment with new data when a post reuqest is exucted.
+         * @param s String that is being converted to JSOn to generate the posts.
+         */
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to")) {
                 Toast.makeText(getActivity().getApplicationContext(), "Unable to download" + s, Toast.LENGTH_SHORT)
@@ -264,6 +337,9 @@ public class ForumFragment extends Fragment {
 
     }
 
+    /**
+     * Launches a forum add activity
+     */
     private void launch() {
         Intent intent = new Intent(getActivity(), ForumAddActivity.class);
         startActivity(intent);

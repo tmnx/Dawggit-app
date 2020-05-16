@@ -11,22 +11,41 @@ import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
 
-
+/**
+ * Database class for SQL lite for Forum Posts
+ * @author Sean Smith
+ * @version Sprint 1
+ */
 public class ForumDb {
-    public static final int DB_VERSION = 1;
-    public static final String DB_NAME = "Forum.db";
-
-    private CourseDBHelper mForumDBHelper;
+    /**
+     * Version of database
+     */
+    private static final int DB_VERSION = 1;
+    /**
+     * Name of database for SQL lite
+     */
+    private static final String DB_NAME = "Forum.db";
+    /**
+     * Used to help manage the database
+     */
+    private ForumDBHelper mForumDBHelper;
+    /**
+     * SQLLite database object used for adding and retrieving
+     */
     private SQLiteDatabase mSQLiteDatabase;
 
+    /**
+     * Creates a new Forum Database Object
+     * @param context Context object was created in.
+     */
     public ForumDb(Context context) {
-        mForumDBHelper = new CourseDBHelper(
+        mForumDBHelper = new ForumDBHelper(
                 context, DB_NAME, null, DB_VERSION);
         mSQLiteDatabase = mForumDBHelper.getWritableDatabase();
     }
 
     /**
-     * Inserts the course into the local sqlite table. Returns true if successful, false otherwise.
+     * Inserts the forum into the local forum table. Returns true if successful, false otherwise.
      * @return true or false
      */
     public boolean insertForum(String tid, String title, String content, String date_created, String email) {
@@ -43,14 +62,14 @@ public class ForumDb {
     }
 
     /**
-     * Delete all the data from the Courses
+     * Delete all the data from the Forums
      */
     public void deleteCourses() {
         mSQLiteDatabase.delete("Thread", null, null);
     }
 
     /**
-     * Returns the list of courses from the local Course table.
+     * Returns the list of courses from the local Forum table.
      * @return list
      */
     public List<Forum> getThreads() {
@@ -85,30 +104,51 @@ public class ForumDb {
     }
 
 
+    /**
+     * Class helps in creation/deletion of forum database
+     */
+    class ForumDBHelper extends SQLiteOpenHelper {
+        /**
+         * String for creating the database.
+         */
+        private final String CREATE_FORUM_SQL;
+    /**
+     * String for deleting the database.
+     */
+        private final String DROP_FORUM_SQL;
 
-
-
-    class CourseDBHelper extends SQLiteOpenHelper {
-
-        private final String CREATE_COURSE_SQL;
-
-        private final String DROP_COURSE_SQL;
-
-        public CourseDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        /**
+         * Constructor for database helper.
+         * @param context Context for which the object was created.
+         * @param name Name of the object.
+         * @param factory Factory of the object.
+         * @param version Version of the database.
+         */
+        public ForumDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
-            CREATE_COURSE_SQL = context.getString(R.string.CREATE_THREAD_SQL);
-            DROP_COURSE_SQL = context.getString(R.string.DROP_THREAD_SQL);
+            CREATE_FORUM_SQL = context.getString(R.string.CREATE_THREAD_SQL);
+            DROP_FORUM_SQL = context.getString(R.string.DROP_THREAD_SQL);
 
         }
 
+        /**
+         * When the database is created this is called
+         * @param sqLiteDatabase SQLiteDatabase that is being created.
+         */
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            sqLiteDatabase.execSQL(CREATE_COURSE_SQL);
+            sqLiteDatabase.execSQL(CREATE_FORUM_SQL);
         }
 
+        /**
+         * Drops tables from old database on new database creation
+         * @param sqLiteDatabase Database which tables are being dropped
+         * @param i A string that is not being used but is required by super()
+         * @param i1 A string that is not being used but is required by super()
+         */
         @Override
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-            sqLiteDatabase.execSQL(DROP_COURSE_SQL);
+            sqLiteDatabase.execSQL(DROP_FORUM_SQL);
             onCreate(sqLiteDatabase);
         }
     }

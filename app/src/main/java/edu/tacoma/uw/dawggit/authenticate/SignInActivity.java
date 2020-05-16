@@ -1,11 +1,16 @@
 package edu.tacoma.uw.dawggit.authenticate;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import edu.tacoma.uw.dawggit.MainActivity;
 import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.main.HomeActivity;
+import edu.tacoma.uw.dawggit.main.HomeFragment;
 import edu.tacoma.uw.dawggit.model.User;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +18,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +44,8 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
     private JSONObject mUserJSON;
     private User mUser;
 
+    private FirebaseAuth mAuth;
+
     /**
      * If the user is already logged in, then there will be no need to login again.
      * Otherwise, the LogInFragment is launched and the user will have to login.
@@ -45,6 +55,22 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null) {
+            // User is signed in (getCurrentUser() will be null if not signed in)
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
+
+
+
+
+
+
 
         SharedPreferences sharedPreferences =
                 getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
@@ -69,6 +95,10 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
 //            finish();
 //        }
     }
+
+
+
+
 
     /**
      * A POST request will be sent to https://dawggit.herokuapp.com/login
