@@ -2,9 +2,12 @@ package edu.tacoma.uw.dawggit.comment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.course.CourseAddActivity;
 import edu.tacoma.uw.dawggit.forum.Forum;
 import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
 
@@ -38,6 +42,9 @@ public class CommentAddActivity extends AppCompatActivity {
      * String to specify the feature.
      */
     public static final String ADD_COMMENT = "ADD_COMMENT";
+
+    /**Used to get the Current user's Email*/
+    private SharedPreferences mSharedPreferences;
 
     /**
      * JSON objects of Comments.
@@ -56,16 +63,32 @@ public class CommentAddActivity extends AppCompatActivity {
         Intent i = this.getIntent();
         final String thread_id = i.getStringExtra("thread_id");
 
+        mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
+        String userEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
 //        Log.e("Testing thread id", thread_id);  // for debugging
 
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = "tmn1014@uw.edu";
+                if(userEmail == null || TextUtils.isEmpty(userEmail)) {
+                    Toast.makeText(CommentAddActivity.this,
+                            "Invalid Email, Please log out and log back in",
+                            Toast.LENGTH_SHORT).show();
+                    Log.e("ForumAddActivity Email", "mSharedPreferences did not pass correct email");
+                }
+                String email = userEmail;
                 String content = commentText.getText().toString();
                 Comment comment = new Comment(email, thread_id, content);
-                addComment(comment);
-                finish();
+                if(content.length() > 255) {
+                    Toast.makeText(CommentAddActivity.this,
+                            "Comments can only be 255 characters", Toast.LENGTH_SHORT).show();
+                    Log.d("CommentAddActivity", "Content is too long");
+                }
+                else {
+                    addComment(comment);
+                    finish();
+                }
+
             }
         });
 

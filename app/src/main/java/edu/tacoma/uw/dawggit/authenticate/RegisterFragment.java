@@ -30,6 +30,7 @@ import edu.tacoma.uw.dawggit.R;
  */
 public class RegisterFragment extends Fragment {
 
+    /**Used for firebase authentication.*/
     private FirebaseAuth mAuth;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,6 +71,10 @@ public class RegisterFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Initializes firebase
+     * @param savedInstanceState null
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +127,17 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(v.getContext(), "Enter valid password (at least 6 characters)"
                             , Toast.LENGTH_SHORT).show();
                     pwd.requestFocus();
+                } else if (usernameText.length() > 20) {
+                    Toast.makeText(v.getContext(),
+                            "Username is too long, only 20 characters", Toast.LENGTH_SHORT).show();
+                    username.requestFocus();
+                } else if (email.length() > 30) {
+                    Toast.makeText(v.getContext(),
+                            "Email is too long, only 30 characters", Toast.LENGTH_SHORT).show();
+                    email.requestFocus();
+                } else if ( pwdText.length() > 255) {
+                    Toast.makeText(v.getContext(),
+                            "Password is too long, only 255 characters", Toast.LENGTH_SHORT).show();
                 } else {
 
                     mAuth.createUserWithEmailAndPassword(emailText.toString(), pwdText.toString())

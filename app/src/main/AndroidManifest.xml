@@ -12,10 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".course.CourseAddActivity"></activity>
+        <!--<activity android:name=".listings.ItemListingAddActivity"></activity>
+        <activity android:name=".listings.ItemListingDetail" />-->
+        <activity android:name=".course.CourseAddActivity" />
         <activity android:name=".comment.CommentsContent" />
         <activity android:name=".comment.CommentAddActivity" />
-        <activity android:name=".review.ReviewAddActivity" />
+       <!-- <activity android:name=".review.ReviewAddActivity" />-->
         <activity android:name=".main.HomeActivity" />
         <activity android:name=".forum.ForumDisplayActivity" />
         <activity android:name=".forum.ForumAddActivity" />
