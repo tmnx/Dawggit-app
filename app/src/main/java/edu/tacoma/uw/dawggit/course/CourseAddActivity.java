@@ -131,6 +131,10 @@ public class CourseAddActivity extends AppCompatActivity {
      */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
 
+       /**
+        * Connect to remote database.
+        * @param urls strings of urls
+        */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -170,6 +174,10 @@ public class CourseAddActivity extends AppCompatActivity {
             return response;
         }
 
+        /**
+         * Check if post is added successfully or not.
+         * @param s JSON string.
+         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to add the new post")) {
