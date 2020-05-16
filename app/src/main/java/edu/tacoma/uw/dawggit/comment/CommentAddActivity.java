@@ -26,9 +26,22 @@ import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.forum.Forum;
 import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
 
+/**
+ * Handles the add comment feature. The user can reply to a forum and
+ * is able to view replies.
+ *
+ * @author Minh Nguyen
+ */
 public class CommentAddActivity extends AppCompatActivity {
 
+    /**
+     * String to specify the feature.
+     */
     public static final String ADD_COMMENT = "ADD_COMMENT";
+
+    /**
+     * JSON objects of Comments.
+     */
     private JSONObject mCommentJSON;
 
     @Override
@@ -43,7 +56,7 @@ public class CommentAddActivity extends AppCompatActivity {
         Intent i = this.getIntent();
         final String thread_id = i.getStringExtra("thread_id");
 
-        Log.e("Testing thread id", thread_id);
+//        Log.e("Testing thread id", thread_id);  // for debugging
 
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +78,11 @@ public class CommentAddActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Add the user comment to the backend database.
+     *
+     * @param comment user comment.
+     */
     public void addComment(Comment comment) {
         StringBuilder url = new StringBuilder(getString(R.string.add_comment));
         mCommentJSON = new JSONObject();
@@ -80,6 +98,9 @@ public class CommentAddActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Private helper class to sync the app with the backend database.
+     */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
