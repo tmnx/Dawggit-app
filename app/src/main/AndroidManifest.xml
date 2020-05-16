@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".course.CourseAddActivity"></activity>
+        <activity android:name=".course.CourseDisplayActivity"></activity>
+        <activity android:name=".course.CourseAddActivity" />
         <activity android:name=".comment.CommentsContent" />
         <activity android:name=".comment.CommentAddActivity" />
         <activity android:name=".review.ReviewAddActivity" />

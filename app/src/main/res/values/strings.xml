@@ -22,4 +22,6 @@
     <string name="hintCourseID">Enter the Course Code</string>
     <string name="hintCourseTitle">Enter the Title of the Course</string>
     <string name="hintCourseInfo">Enter the Course Information</string>
+    <string name="buttonAddReview">Add Review</string>
+    <string name="buttonViewReviews">View Reviews</string>
 </resources>

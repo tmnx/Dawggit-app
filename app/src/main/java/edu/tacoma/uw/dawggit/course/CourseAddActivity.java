@@ -35,6 +35,10 @@ public class CourseAddActivity extends AppCompatActivity {
 
     private JSONObject mCourseJSON;
 
+    /**
+     * Initializes the properties for all of the buttons and text.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +99,12 @@ public class CourseAddActivity extends AppCompatActivity {
      */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * Used to get the list of threads from the database.
+         *
+         * @param urls
+         * @return
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -134,6 +144,12 @@ public class CourseAddActivity extends AppCompatActivity {
             return response;
         }
 
+
+        /**
+         * Attempts to create a json object if it false a toast is displayed.
+         *
+         * @param s JSON string
+         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to add the new post")) {

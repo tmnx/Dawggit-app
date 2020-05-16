@@ -132,11 +132,23 @@ public class CourseDB {
             DROP_COURSE_SQL = context.getString(R.string.DROP_COURSE_SQL);
         }
 
+        /**
+         * Create local database.
+         *
+         * @param db the local database.
+         */
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_COURSE_SQL);
         }
 
+        /**
+         * Drop database and recreate database.
+         *
+         * @param db local database
+         * @param oldVersion
+         * @param newVersion
+         */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL(DROP_COURSE_SQL);
