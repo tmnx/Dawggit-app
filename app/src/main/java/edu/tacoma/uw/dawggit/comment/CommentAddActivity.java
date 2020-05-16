@@ -51,6 +51,9 @@ public class CommentAddActivity extends AppCompatActivity {
      */
     private JSONObject mCommentJSON;
 
+    /**
+     * Create view and setup buttons / text views.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +128,10 @@ public class CommentAddActivity extends AppCompatActivity {
      * Private helper class to sync the app with the backend database.
      */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
+        
+       /**
+        * Connect to remote database.
+        */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -164,6 +171,10 @@ public class CommentAddActivity extends AppCompatActivity {
             return response;
         }
 
+        /**
+         * Check if post is added successfully or not.
+         * @param s JSON string.
+         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to add the new post")) {
