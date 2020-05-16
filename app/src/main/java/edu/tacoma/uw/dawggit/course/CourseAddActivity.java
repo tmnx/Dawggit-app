@@ -26,9 +26,10 @@ import edu.tacoma.uw.dawggit.forum.Forum;
 import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
 import edu.tacoma.uw.dawggit.main.CourseReviewFragment;
 
+/**
+ *
+ */
 public class CourseAddActivity extends AppCompatActivity {
-
-//    public static final String ARG_ITEM_ID = "item_id";
 
     public static final String ADD_COURSE = "ADD COURSE";
 
@@ -43,14 +44,16 @@ public class CourseAddActivity extends AppCompatActivity {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finish();   // close add activity
             }
         });
 
+        // Get user inputs
         final EditText CIDtext = findViewById(R.id.editCourseID);
         final EditText titleText = findViewById(R.id.editCourseTitle);
         final EditText infoText = findViewById(R.id.editCourseInfo);
 
+        // Add course to database
         Button addButton = findViewById(R.id.addCourse);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +68,11 @@ public class CourseAddActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Add course to remote database.
+     *
+     * @param course the course to be added.
+     */
     public void addCourse(Course course) {
         StringBuilder url = new StringBuilder(getString(R.string.add_course));
         mCourseJSON = new JSONObject();
@@ -82,7 +90,11 @@ public class CourseAddActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper class to sync the app with the remote database.
+     */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
+
         @Override
         protected String doInBackground(String... urls) {
             String response = "";

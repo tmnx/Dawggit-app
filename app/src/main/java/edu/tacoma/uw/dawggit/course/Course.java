@@ -7,16 +7,52 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Create a Course object that holds the information needed to add Course to remote
+ * database.
+ *
+ * @author Minh Nguyen
+ */
 public class Course {
 
+    /**
+     * Course code
+     */
     private String course_code;
+
+    /**
+     * Title of the course
+     */
     private String title;
+
+    /**
+     * Course content
+     */
     private String course_info;
+
+    /**
+     * User email who created the course
+     */
     private String email;
 
+    /**
+     * Course code in sql
+     */
     public static final String COURSEID = "course_code";
+
+    /**
+     * Course Title in sql
+     */
     public static final String TITLE = "title";
+
+    /**
+     * Course content in sql
+     */
     public static final String INFO = "course_info";
+
+    /**
+     * User email in sql
+     */
     public static final String EMAIL = "email";
 
     /**
@@ -34,6 +70,7 @@ public class Course {
         email = theEmail;
     }
 
+    // GETTERS
     public String getCourse_code() {
         return course_code;
     }
@@ -50,6 +87,13 @@ public class Course {
         return title;
     }
 
+    /**
+     * Parse a string of JSON objects and turn them into Comments.
+     *
+     * @param courseJSON A string of JSON objects
+     * @return a list of Courses.
+     * @throws JSONException
+     */
     public static List<Course> parseCourseJSON(String courseJSON) throws JSONException {
         List<Course> courseList = new ArrayList<>();
 

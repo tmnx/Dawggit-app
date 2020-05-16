@@ -11,12 +11,29 @@ import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
 
+/**
+ * Create a local Course database.
+ */
 public class CourseDB {
 
+    /**
+     * Database version
+     */
     public static final int DB_VERSION = 1;
+
+    /**
+     * Database name
+     */
     public static final String DB_NAME = "Course.db";
 
+    /**
+     * Helper to create and drop table.
+     */
     private CourseDBHelper mCourseDBHelper;
+
+    /**
+     * Local database.
+     */
     private SQLiteDatabase mSqLiteDatabase;
 
     /**
@@ -56,6 +73,11 @@ public class CourseDB {
         mSqLiteDatabase.delete("Course", null, null);
     }
 
+    /**
+     * Get all courses.
+     *
+     * @return
+     */
     public List<Course> getCourses() {
         String[] columns = {"course_code", "title", "course_info", "email"};
 
@@ -93,6 +115,14 @@ public class CourseDB {
         private final String CREATE_COURSE_SQL;
         private final String DROP_COURSE_SQL;
 
+        /**
+         * Initialize the create and drop sql string.
+         *
+         * @param context this context
+         * @param name database name
+         * @param factory CursorFactory
+         * @param version database version
+         */
         public CourseDBHelper(Context context,
                                String name,
                                SQLiteDatabase.CursorFactory factory,
