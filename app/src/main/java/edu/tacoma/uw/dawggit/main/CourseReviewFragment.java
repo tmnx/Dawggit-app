@@ -66,6 +66,9 @@ public class CourseReviewFragment extends Fragment {
         }
     }
 
+    /**
+     * Create fragment view and set up buttons / text edits with listeners.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,6 +86,9 @@ public class CourseReviewFragment extends Fragment {
         return ve;
     }
 
+    /**
+     * Refresh connection and refresh fragment content.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -169,6 +175,10 @@ public class CourseReviewFragment extends Fragment {
             mTwoPane = twoPane;
         }
 
+       /**
+        * Create a view holder for an item.
+        * @return a view holder.
+        */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
@@ -176,6 +186,9 @@ public class CourseReviewFragment extends Fragment {
             return new ViewHolder(view);
         }
 
+       /**
+        * Bind a view holder for an item.
+        */
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mIdView.setText(mValues.get(position).getCourse_code());
@@ -184,6 +197,9 @@ public class CourseReviewFragment extends Fragment {
 //            holder.itemView.setOnClickListener(mOnClickListener);
         }
 
+       /**
+        * get item count.
+        */
         @Override
         public int getItemCount() {
             return mValues.size();
@@ -209,6 +225,10 @@ public class CourseReviewFragment extends Fragment {
      */
     private class CoursesTask extends AsyncTask<String, Void, String> {
 
+       /**
+        * Connect to remote database.
+        * @param urls urls strings
+        */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -239,6 +259,10 @@ public class CourseReviewFragment extends Fragment {
 
         }
 
+        /**
+         * Check if post is added successfully or not.
+         * @param s JSON string.
+         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to")) {
