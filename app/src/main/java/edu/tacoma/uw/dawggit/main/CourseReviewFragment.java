@@ -6,6 +6,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +19,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.RecyclerView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -36,15 +36,17 @@ import edu.tacoma.uw.dawggit.course.CourseDB;
 import edu.tacoma.uw.dawggit.course.CourseDisplayActivity;
 
 /**
+ * Displays course review posts to a user.
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link CourseReviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class CourseReviewFragment extends Fragment {
+
     private boolean mTwoPane;
     private List<Course> mCourseList;
     private RecyclerView mRecyclerView;
-    private CourseDB mCourseDB;
+    private CourseDB mCoursemDB;
 
     public CourseReviewFragment() {
         // Required empty public constructor
@@ -53,17 +55,19 @@ public class CourseReviewFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment HomeFragment.
+     *
+     * @return A new instance of fragment CourseReviewFragment.
      */
     public static CourseReviewFragment newInstance() {
         CourseReviewFragment fragment = new CourseReviewFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
         return fragment;
     }
 
     /**
-     * Calls parent onCreate.
+     * Used to change the behavior of the base on create
      * @param savedInstanceState
      */
     @Override
@@ -74,33 +78,39 @@ public class CourseReviewFragment extends Fragment {
     }
 
     /**
-     * Set up the layout and hook up buttons with listen.
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return the new view for app.
+     * Changes the behavior of on create view so we can add buttons
+     * @param inflater Used to create a view
+     * @param container View group of this object
+     * @param savedInstanceState Saved state of the instance
+     * @return View that has been created
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View ve = inflater.inflate(R.layout.fragment_course_review, container, false);
-        mRecyclerView = ve.findViewById(R.id.course_review_list);
+
+        mRecyclerView = ve.findViewById(R.id.course_item_list);
         assert mRecyclerView != null;
-        setupRecyclerView((RecyclerView) mRecyclerView);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        Button addButton = ve.findViewById(R.id.addReviewButton);
+
+        setupCourseRecyclerView((RecyclerView) mRecyclerView);
+
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                                        DividerItemDecoration.VERTICAL));
+
+        Button addButton = ve.findViewById(R.id.new_course);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launch();
             }
         });
+
         return ve;
     }
 
     /**
-     * Refresh connection and refresh fragment content.
-     * On resume refresh course list.
+     * Overrides on resume so the database is queried whenever something is added
      */
     @Override
     public void onResume() {
@@ -119,40 +129,66 @@ public class CourseReviewFragment extends Fragment {
                     "No network connection available. Displaying locally stored data",
                     Toast.LENGTH_SHORT).show();
 
-            if (mCourseDB == null) {
-                mCourseDB = new CourseDB(getActivity());
+            if (mCoursemDB == null) {
+                mCoursemDB = new CourseDB(getActivity());
             }
             if (mCourseList == null) {
-                mCourseList = mCourseDB.getCourses();
-                setupRecyclerView(mRecyclerView);
+                mCourseList = mCoursemDB.getCourses();
+                setupCourseRecyclerView(mRecyclerView);
                 if(mRecyclerView != null) {
-                    mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+                    mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                                                    DividerItemDecoration.VERTICAL));
                 }
+
             }
         }
     }
 
+    /**
+     * Launches a course add activity
+     */
+    private void launch() {
+        Intent intent = new Intent(getActivity(), CourseAddActivity.class);
+        startActivity(intent);
+    }
 
     /**
-     * Set up the recycler view to display a list of courses.
-     * @param recyclerView a recycler view to be added to
+     * Sets up the recycler view using the list of courses
+     * @param recyclerView Recycle view that is being set up.
      */
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupCourseRecyclerView(@NonNull RecyclerView recyclerView) {
         if(mCourseList != null) {
-            recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((HomeActivity) getActivity(),
-                                                                        mCourseList, mTwoPane));
+            recyclerView.setAdapter(new SimpleCourseRecyclerViewAdapter((HomeActivity) getActivity(),
+                    mCourseList, mTwoPane));
         }
     }
 
     /**
-     * Helper class to manager the recycler view
+     * Simple Recycle View class
+     * @author Minh Nguyen
+     * @version Sprint 2
      */
-    public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public static class SimpleCourseRecyclerViewAdapter
+            extends RecyclerView.Adapter<SimpleCourseRecyclerViewAdapter.CourseViewHolder> {
 
+        /**
+         * Parent of this activity
+         */
         private final HomeActivity mParentActivity;
+
+        /**
+         * List of course postings
+         */
         private final List<Course> mValues;
+
+        /**
+         * Whether the screen is two pane or not
+         */
         private final boolean mTwoPane;
+
+        /**
+         * Sets up the listener for each forum item
+         */
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,6 +196,8 @@ public class CourseReviewFragment extends Fragment {
                 if (mTwoPane) {
                 } else {
                     Context context = view.getContext();
+                    // testing
+//                    Toast.makeText(context, "Course review clicked " + item.getCourse_code(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, CourseDisplayActivity.class);
                     intent.putExtra(CourseDisplayActivity.ARG_ITEM_ID, item);
                     context.startActivity(intent);
@@ -167,41 +205,35 @@ public class CourseReviewFragment extends Fragment {
             }
         };
 
-        /**
-         * Initializes fields.
-         *
-         * @param parent parent activity
-         * @param items list of courses
-         * @param twoPane boolean value
-         */
-        SimpleItemRecyclerViewAdapter(HomeActivity parent,
-                                      List<Course> items,
-                                      boolean twoPane) {
+        SimpleCourseRecyclerViewAdapter(HomeActivity parent,
+                                        List<Course> items,
+                                        boolean twoPane) {
             mValues = items;
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
 
         /**
-         * Create view holder for course.
-         * @param parent ViewGroup
-         * @param viewType view type
-         * @return the view holder of course.
+         * Generates a view holder
+         * @param parent Parent of the view holder
+         * @param viewType Type of view.
+         * @return Created view holder
          */
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.course_list_content, parent, false);
-            return new ViewHolder(view);
+                    .inflate(R.layout.review_list_content, parent, false);
+            return new CourseViewHolder(view);
         }
 
         /**
-         * Bind to view holder.
-         * @param holder view holder.
-         * @param position which course.
+         * Sets up the text and listeners
+         * @param holder Used to reference each list item.
+         * @param position Position of each list item.
          */
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
             holder.mIdView.setText(mValues.get(position).getCourse_code());
             holder.mContentView.setText(mValues.get(position).getTitle());
             holder.itemView.setTag(mValues.get(position));
@@ -209,8 +241,8 @@ public class CourseReviewFragment extends Fragment {
         }
 
         /**
-         * Get item count
-         * @return return item counts
+         * Returns the number of courses
+         * @return Number of courses
          */
         @Override
         public int getItemCount() {
@@ -218,29 +250,31 @@ public class CourseReviewFragment extends Fragment {
         }
 
         /**
-         * Helper class to hold a view (for each course item).
+         * Class used to generate the list of course posts
+         * @author Minh Nguyen
+         * @version Sprint 2
          */
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class CourseViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
             final TextView mContentView;
 
-            ViewHolder(View view) {
+            CourseViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mIdView = (TextView) view.findViewById(R.id.id_course);
+                mContentView = (TextView) view.findViewById(R.id.id_content);
             }
         }
-    }
 
+    }
     /**
-     * Helper class to manage remote DB connection and retrieve DB.
+     * Asynchronous class used to contact the web to perform a get request
      */
     private class CoursesTask extends AsyncTask<String, Void, String> {
 
         /**
-         * Check if response can connect to DB.
-         * @param urls
-         * @return response
+         * Attempts to connect to the database via a get request then returns a string containing JSON
+         * @param urls URL the of the database
+         * @return JSON retrieved from the database.
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -260,7 +294,7 @@ public class CourseReviewFragment extends Fragment {
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to download the list of posts, Reason: "
+                    response = "Unable to download the list of courses, Reason: "
                             + e.getMessage();
                 }
                 finally {
@@ -273,10 +307,9 @@ public class CourseReviewFragment extends Fragment {
         }
 
         /**
-         * Check if post is added successfully or not.
-         * @param s JSON string.
+         * Loads the course fragment with new data when a post request is executed.
+         * @param s String that is being converted to JSOn to generate the posts.
          */
-        @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to")) {
                 Toast.makeText(getActivity().getApplicationContext(), "Unable to download" + s, Toast.LENGTH_SHORT)
@@ -287,27 +320,27 @@ public class CourseReviewFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(s);
 
                 if (jsonObject.getBoolean("success")) {
-                    mCourseList = Course.parseCourseJSON(
+                    mCourseList = Course.parseCourseReviewJSON(
                             jsonObject.getString("names"));
-                    if (mCourseDB == null) {
-                        mCourseDB = new CourseDB(getActivity().getApplicationContext());
+                    if (mCoursemDB == null) {
+                        mCoursemDB = new CourseDB(getActivity().getApplicationContext());
                     }
 
                     // Delete old data so that you can refresh the local
                     // database with the network data.
-                    mCourseDB.deleteCourses();
+                    mCoursemDB.deleteCourses();
 
                     // Also, add to the local database
-                    for (int i = 0; i< mCourseList.size(); i++) {
+                    for (int i=0; i<mCourseList.size(); i++) {
                         Course course = mCourseList.get(i);
-                        mCourseDB.insertCourse(course.getCourse_code(),
-                                course.getTitle(),
-                                course.getCourse_info(),
-                                course.getEmail());
+                        mCoursemDB.insertCourse(course.getCourse_code(),
+                                                course.getTitle(),
+                                                course.getCourse_info(),
+                                                course.getEmail());
                     }
 
                     if (!mCourseList.isEmpty()) {
-                        setupRecyclerView((RecyclerView) mRecyclerView);
+                        setupCourseRecyclerView((RecyclerView) mRecyclerView);
                     }
                 }
 
@@ -316,15 +349,5 @@ public class CourseReviewFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         }
-
     }
-
-    /**
-     * Launch add course activity when user click add course button.
-     */
-    private void launch() {
-        Intent intent = new Intent(getActivity(), CourseAddActivity.class);
-        startActivity(intent);
-    }
-
 }

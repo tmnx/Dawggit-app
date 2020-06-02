@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -95,7 +96,7 @@ public class Course implements Serializable {
      * @return a list of Courses.
      * @throws JSONException
      */
-    public static List<Course> parseCourseJSON(String courseJSON) throws JSONException {
+    public static List<Course> parseCourseReviewJSON(String courseJSON) throws JSONException {
         List<Course> courseList = new ArrayList<>();
 
         if (courseJSON != null) {
@@ -109,6 +110,7 @@ public class Course implements Serializable {
                                             obj.getString(EMAIL));
                 courseList.add(course);
             }
+            Collections.reverse(courseList);
         }
         return courseList;
     }

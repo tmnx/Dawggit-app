@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.comment.CommentAddActivity;
@@ -41,6 +42,7 @@ public class ForumDisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_display);
+
         if (getIntent().getSerializableExtra(ARG_ITEM_ID) != null) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
@@ -53,6 +55,7 @@ public class ForumDisplayActivity extends AppCompatActivity {
             ((TextView) findViewById((R.id.page_email))).setText(mForum.getEmail());
             ((TextView) findViewById((R.id.post_content))).setText(mForum.getContent());
         }
+
         ImageButton finishButton = findViewById(R.id.end);
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,12 +87,4 @@ public class ForumDisplayActivity extends AppCompatActivity {
         });
 
     }
-
-//    public void createComment(Bundle savedInstanceState) {
-//        Intent i = new Intent(this, CommentAddActivity.class);
-//        startActivity(i);
-//    }
-
-
-
 }
