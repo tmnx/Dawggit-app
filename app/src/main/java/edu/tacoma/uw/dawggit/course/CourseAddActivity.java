@@ -2,11 +2,8 @@ package edu.tacoma.uw.dawggit.course;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,21 +27,14 @@ import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
 import edu.tacoma.uw.dawggit.main.CourseReviewFragment;
 
 /**
- * Responsible for adding courses to the course reviews tab.
+ *
  */
 public class CourseAddActivity extends AppCompatActivity {
 
-    /**Constant*/
     public static final String ADD_COURSE = "ADD COURSE";
-    /**Used to send data*/
-    private JSONObject mCourseJSON;
-    /**Used to get the user email*/
-    private SharedPreferences mSharedPreferences;
 
-    /**
-     * Creates the view.
-     * @param savedInstanceState null
-     */
+    private JSONObject mCourseJSON;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +48,6 @@ public class CourseAddActivity extends AppCompatActivity {
             }
         });
 
-        mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
-        String userEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
-
         // Get user inputs
         final EditText CIDtext = findViewById(R.id.editCourseID);
         final EditText titleText = findViewById(R.id.editCourseTitle);
@@ -71,35 +58,12 @@ public class CourseAddActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userEmail == null || TextUtils.isEmpty(userEmail)) {
-                    Toast.makeText(CourseAddActivity.this,
-                            "Invalid Email, Please log out and log back in",
-                            Toast.LENGTH_SHORT).show();
-                    Log.e("ForumAddActivity Email", "mSharedPreferences did not pass correct email");
-                }
                 String course_code = CIDtext.getText().toString();
                 String title = titleText.getText().toString();
                 String info = infoText.getText().toString();
-                Course course = new Course(course_code, title, info, userEmail);
-                if(course_code.length() > 7) {
-                    Toast.makeText(CourseAddActivity.this,
-                            "Course Code can only have 7 characters", Toast.LENGTH_SHORT).show();
-                    Log.d("CourseAddActivity", "Course Code is too long");
-                }
-                else if(title.length() > 255) {
-                    Toast.makeText(CourseAddActivity.this,
-                            "Title can only have 255 characters", Toast.LENGTH_SHORT).show();
-                    Log.d("CourseAddActivity", "Title is too long");
-                }
-                else if(info.length() > 255) {
-                    Toast.makeText(CourseAddActivity.this,
-                            "Info can only have 255 characters", Toast.LENGTH_SHORT).show();
-                    Log.d("CourseAddActivity", "Info is too long");
-                }
-                else {
-                    addCourse(course);
-                    finish();
-                }
+                Course course = new Course(course_code, title, info, "tmn1014@uw.edu");
+                addCourse(course);
+                finish();
             }
         });
     }

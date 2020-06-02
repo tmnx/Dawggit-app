@@ -22,7 +22,4 @@
     <string name="hintCourseID">Enter the Course Code</string>
     <string name="hintCourseTitle">Enter the Title of the Course</string>
     <string name="hintCourseInfo">Enter the Course Information</string>
-    <string name="Listings">Listings</string>
-    <string name="add_listings">New Item</string>
-    <string name="tv_fragment_listings_listings">Listings</string>
 </resources>

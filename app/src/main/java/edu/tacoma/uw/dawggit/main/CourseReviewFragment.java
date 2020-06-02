@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -31,6 +33,7 @@ import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.course.Course;
 import edu.tacoma.uw.dawggit.course.CourseAddActivity;
 import edu.tacoma.uw.dawggit.course.CourseDB;
+import edu.tacoma.uw.dawggit.course.CourseDisplayActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +62,10 @@ public class CourseReviewFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Calls parent onCreate.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +74,11 @@ public class CourseReviewFragment extends Fragment {
     }
 
     /**
-     * Create fragment view and set up buttons / text edits with listeners.
+     * Set up the layout and hook up buttons with listen.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the new view for app.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +87,7 @@ public class CourseReviewFragment extends Fragment {
         mRecyclerView = ve.findViewById(R.id.course_review_list);
         assert mRecyclerView != null;
         setupRecyclerView((RecyclerView) mRecyclerView);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         Button addButton = ve.findViewById(R.id.addReviewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +100,7 @@ public class CourseReviewFragment extends Fragment {
 
     /**
      * Refresh connection and refresh fragment content.
+     * On resume refresh course list.
      */
     @Override
     public void onResume() {
@@ -112,7 +125,9 @@ public class CourseReviewFragment extends Fragment {
             if (mCourseList == null) {
                 mCourseList = mCourseDB.getCourses();
                 setupRecyclerView(mRecyclerView);
-
+                if(mRecyclerView != null) {
+                    mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+                }
             }
         }
     }
@@ -143,19 +158,11 @@ public class CourseReviewFragment extends Fragment {
             public void onClick(View view) {
                 Course item = (Course) view.getTag();
                 if (mTwoPane) {
-
-//                    Bundle arguments = new Bundle();
-//                    arguments.putSerializable(CourseDetailFragment.ARG_ITEM_ID, item);
-//                    CourseDetailFragment fragment = new CourseDetailFragment();
-//                    fragment.setArguments(arguments);
-//                    mParentActivity.getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, fragment)
-//                            .commit();
                 } else {
-//                    Context context = view.getContext();
-//                    Intent intent = new Intent(context, CourseDisplayActivity.class);
-//                    intent.putExtra(CourseDisplayActivity.ARG_ITEM_ID, item);
-//                    context.startActivity(intent);
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, CourseDisplayActivity.class);
+                    intent.putExtra(CourseDisplayActivity.ARG_ITEM_ID, item);
+                    context.startActivity(intent);
                 }
             }
         };
@@ -175,10 +182,12 @@ public class CourseReviewFragment extends Fragment {
             mTwoPane = twoPane;
         }
 
-       /**
-        * Create a view holder for an item.
-        * @return a view holder.
-        */
+        /**
+         * Create view holder for course.
+         * @param parent ViewGroup
+         * @param viewType view type
+         * @return the view holder of course.
+         */
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
@@ -186,20 +195,23 @@ public class CourseReviewFragment extends Fragment {
             return new ViewHolder(view);
         }
 
-       /**
-        * Bind a view holder for an item.
-        */
+        /**
+         * Bind to view holder.
+         * @param holder view holder.
+         * @param position which course.
+         */
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mIdView.setText(mValues.get(position).getCourse_code());
             holder.mContentView.setText(mValues.get(position).getTitle());
             holder.itemView.setTag(mValues.get(position));
-//            holder.itemView.setOnClickListener(mOnClickListener);
+            holder.itemView.setOnClickListener(mOnClickListener);
         }
 
-       /**
-        * get item count.
-        */
+        /**
+         * Get item count
+         * @return return item counts
+         */
         @Override
         public int getItemCount() {
             return mValues.size();
@@ -225,10 +237,11 @@ public class CourseReviewFragment extends Fragment {
      */
     private class CoursesTask extends AsyncTask<String, Void, String> {
 
-       /**
-        * Connect to remote database.
-        * @param urls urls strings
-        */
+        /**
+         * Check if response can connect to DB.
+         * @param urls
+         * @return response
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
