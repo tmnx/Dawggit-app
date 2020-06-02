@@ -1,9 +1,8 @@
-package edu.tacoma.uw.dawggit.comment;
+package edu.tacoma.uw.dawggit.review;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,75 +25,69 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.tacoma.uw.dawggit.R;
-import edu.tacoma.uw.dawggit.course.CourseAddActivity;
-import edu.tacoma.uw.dawggit.forum.Forum;
-import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
+import edu.tacoma.uw.dawggit.comment.Comment;
+import edu.tacoma.uw.dawggit.comment.CommentAddActivity;
 
 /**
- * Handles the add comment feature. The user can reply to a forum and
- * is able to view replies.
+ * Handles the add review feature. The user can review a course and
+ * is able to view reviews.
  *
  * @author Minh Nguyen
  */
-public class CommentAddActivity extends AppCompatActivity {
+public class ReviewAddActivity extends AppCompatActivity {
 
     /**
      * String to specify the feature.
      */
-    public static final String ADD_COMMENT = "ADD_COMMENT";
+    public static final String ADD_REVIEW = "ADD_REVIEW";
+
+    /**
+     * JSON objects of Reviews.
+     */
+    private JSONObject mReviewJSON;
 
     /**Used to get the Current user's Email*/
     private SharedPreferences mSharedPreferences;
 
-    /**
-     * JSON objects of Comments.
-     */
-    private JSONObject mCommentJSON;
-
-    /**
-     * Set up and connect buttons to features.
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment_add);
+        setContentView(R.layout.activity_review_add);
 
-        ImageView finishButton = findViewById(R.id.closeAddComment);
-        final EditText commentText = findViewById(R.id.commentBox);
-        Button addCommentButton = findViewById(R.id.new_commentButton);
-
-        Intent i = this.getIntent();
-        final String thread_id = i.getStringExtra("thread_id");
+        String courseID = getIntent().getStringExtra("course_id");
 
         mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
         String userEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
 
-        addCommentButton.setOnClickListener(new View.OnClickListener() {
+        EditText commentText = findViewById(R.id.reviewText);
+
+        Button commitReviewButton = findViewById(R.id.buttonCommitReview);
+        commitReviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(userEmail == null || TextUtils.isEmpty(userEmail)) {
-                    Toast.makeText(CommentAddActivity.this,
+                    Toast.makeText(ReviewAddActivity.this,
                             "Invalid Email, Please log out and log back in",
                             Toast.LENGTH_SHORT).show();
-                    Log.e("ForumAddActivity Email", "mSharedPreferences did not pass correct email");
-                }
-                String email = userEmail;
-                String content = commentText.getText().toString();
-                Comment comment = new Comment(email, thread_id, content);
-                if(content.length() > 255) {
-                    Toast.makeText(CommentAddActivity.this,
-                            "Comments can only be 255 characters", Toast.LENGTH_SHORT).show();
-                    Log.d("CommentAddActivity", "Content is too long");
-                }
-                else {
-                    addComment(comment);
-                    finish();
-                }
+                    Log.e("ReviewAddActivity Email", "mSharedPreferences did not pass correct email");
+                } else {
+                    String email = userEmail;
+                    String content = commentText.getText().toString();
+                    Review review = new Review(email, courseID, content);
 
+                    if (content.length() > 255) {
+                        Toast.makeText(ReviewAddActivity.this,
+                                "Reviews can only be 255 characters", Toast.LENGTH_SHORT).show();
+                        Log.d("ReviewAddActivity", "Content is too long");
+                    } else {
+                        addReview(review);
+                        finish();
+                    }
+                }
             }
         });
 
+        ImageView finishButton = findViewById(R.id.closeCourseContent);
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,22 +97,22 @@ public class CommentAddActivity extends AppCompatActivity {
     }
 
     /**
-     * Add the user comment to the backend database.
+     * Add the user review to the backend database.
      *
-     * @param comment user comment.
+     * @param review user review.
      */
-    public void addComment(Comment comment) {
-        StringBuilder url = new StringBuilder(getString(R.string.add_comment));
-        mCommentJSON = new JSONObject();
+    public void addReview(Review review) {
+        StringBuilder url = new StringBuilder(getString(R.string.add_review));
+        mReviewJSON = new JSONObject();
 
         try {
-            mCommentJSON.put(Comment.EMAIL, comment.getEmail());
-            mCommentJSON.put(Comment.THREAD_ID, comment.getThread_id());
-            mCommentJSON.put(Comment.CONTENT, comment.getContent());
-            new CommentAddActivity.AddCourseAsyncTask().execute(url.toString());
+            mReviewJSON.put(Review.EMAIL, review.getEmail());
+            mReviewJSON.put(Review.COURSE_CODE, review.getCourse_code());
+            mReviewJSON.put(Review.CONTENT, review.getContent());
+            new ReviewAddActivity.AddCourseAsyncTask().execute(url.toString());
         }
         catch(JSONException e) {
-            Toast.makeText(this, "Error with JSON creation on adding a course:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error with JSON creation on adding a review:" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -142,8 +135,8 @@ public class CommentAddActivity extends AppCompatActivity {
                             new OutputStreamWriter(urlConnection.getOutputStream());
 
                     // For Debugging
-                    Log.i(ADD_COMMENT, mCommentJSON.toString());
-                    wr.write(mCommentJSON.toString());
+                    Log.i(ADD_REVIEW, mReviewJSON.toString());
+                    wr.write(mReviewJSON.toString());
                     wr.flush();
                     wr.close();
 
@@ -156,7 +149,7 @@ public class CommentAddActivity extends AppCompatActivity {
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to add the new comment, Reason: "
+                    response = "Unable to add the new review, Reason: "
                             + e.getMessage();
                 } finally {
                     if (urlConnection != null)
@@ -173,27 +166,27 @@ public class CommentAddActivity extends AppCompatActivity {
          */
         @Override
         protected void onPostExecute(String s) {
-            if (s.startsWith("Unable to add the new post")) {
+            if (s.startsWith("Unable to add the new review")) {
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                 return;
             }
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 if (jsonObject.getBoolean("success")) {
-                    Toast.makeText(getApplicationContext(), "Comment added successfully"
+                    Toast.makeText(getApplicationContext(), "Review Added successfully"
                             , Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Comment couldn't be added: "
+                    Toast.makeText(getApplicationContext(), "Review couldn't be added: "
                                     + jsonObject.getString("error")
                             , Toast.LENGTH_LONG).show();
-                    Log.e(ADD_COMMENT, jsonObject.getString("error"));
+                    Log.e(ADD_REVIEW, jsonObject.getString("error"));
                 }
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "JSON Parsing error on adding Comment"
+                Toast.makeText(getApplicationContext(), "JSON Parsing error on Adding post"
                                 + e.getMessage()
                         , Toast.LENGTH_LONG).show();
-                Log.e(ADD_COMMENT, e.getMessage());
+                Log.e(ADD_REVIEW, e.getMessage());
             }
         }
     }

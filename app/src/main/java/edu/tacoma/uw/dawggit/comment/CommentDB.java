@@ -139,11 +139,23 @@ public class CommentDB {
             DROP_COMMENT_SQL = context.getString(R.string.DROP_COMMENTS_SQL);
         }
 
+        /**
+         * Create a local database.
+         *
+         * @param db the local database
+         */
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_COMMENT_SQL);
         }
 
+        /**
+         * Drop and create a new database.
+         *
+         * @param db local database
+         * @param oldVersion old version
+         * @param newVersion new version
+         */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL(DROP_COMMENT_SQL);

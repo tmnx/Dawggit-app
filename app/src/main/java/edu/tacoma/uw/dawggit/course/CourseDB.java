@@ -76,7 +76,7 @@ public class CourseDB {
     /**
      * Get all courses.
      *
-     * @return
+     * @return list of courses.
      */
     public List<Course> getCourses() {
         String[] columns = {"course_code", "title", "course_info", "email"};

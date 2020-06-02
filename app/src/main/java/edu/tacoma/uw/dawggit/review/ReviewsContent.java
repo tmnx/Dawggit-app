@@ -1,10 +1,8 @@
-package edu.tacoma.uw.dawggit.comment;
+package edu.tacoma.uw.dawggit.review;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -27,38 +25,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.comment.Comment;
+import edu.tacoma.uw.dawggit.comment.CommentDB;
+import edu.tacoma.uw.dawggit.comment.CommentsContent;
 
 /**
- * Displays the comment content.
+ * Displays the reviews content.
  *
  * @author Minh Nguyen
  */
-public class CommentsContent extends AppCompatActivity {
+public class ReviewsContent extends AppCompatActivity {
 
     /**
-     * A list of comments.
+     * A list of reviews.
      */
-    List<Comment> mCommentList;
+    List<Review> mReviewList;
 
     /**
      * Local comment database.
      */
-    CommentDB mCommentDB;
+    ReviewDB mReviewDB;
 
     /**
      * The current thread the user is in.
      */
-    String mThreadID;
+    String mCourseID;
 
+    /**
+     *
+     * @param savedInstanceState saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comments_content);
+        setContentView(R.layout.activity_reviews_content);
 
-        mThreadID = getIntent().getStringExtra("thread_id");
+        mCourseID = getIntent().getStringExtra("course_id");
 
-        ImageView closeButton = findViewById(R.id.close_comments);
-        closeButton.setOnClickListener(new View.OnClickListener() {
+        ImageView finishButton = findViewById(R.id.closeReviewsList);
+        finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -67,7 +72,7 @@ public class CommentsContent extends AppCompatActivity {
     }
 
     /**
-     * Refresh with the most updated comments.
+     * Refresh reviews content.
      */
     @Override
     public void onResume() {
@@ -76,8 +81,8 @@ public class CommentsContent extends AppCompatActivity {
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            if (mCommentList == null) {
-                new CoursesTask().execute(getString(R.string.get_comments) + mThreadID);
+            if (mReviewList == null) {
+                new ReviewsContent.CoursesTask().execute(getString(R.string.get_reviews) + mCourseID);
             }
         }
         else {
@@ -85,39 +90,38 @@ public class CommentsContent extends AppCompatActivity {
                     "No network connection available. Displaying locally stored data",
                     Toast.LENGTH_SHORT).show();
 
-            if (mCommentDB == null) {
-                mCommentDB = new CommentDB(this);
+            if (mReviewDB == null) {
+                mReviewDB = new ReviewDB(this);
             }
-            if (mCommentList == null) {
-                mCommentList = mCommentDB.getComments(mThreadID);
-                setupList();
-
+            if (mReviewList == null) {
+                mReviewList = mReviewDB.getReviews(mCourseID);
+                setupReviewList();
             }
         }
     }
 
     /**
-     * Set up the list of Comments for the ListView.
+     * Set up the list of Reviews for the ListView.
      */
-    void setupList() {
-        if (!mCommentList.isEmpty() && mCommentList != null) {
-            ListView listView = findViewById(R.id.comments_listview);
+    void setupReviewList() {
+        if (!mReviewList.isEmpty() && mReviewList != null) {
+            ListView listView = findViewById(R.id.reviews_listview);
             ArrayList<String> list = new ArrayList<>();
 
-            for (Comment c: mCommentList) {
-                list.add(c.getDate() + "\n" + c.getEmail() + ": " + c.getContent());
+            for (Review r: mReviewList) {
+                list.add(r.getDate().subSequence(0,10) + "\n" + r.getEmail() + "\n\n" + r.getContent());
             }
 
             ArrayAdapter arrayAdapter = new ArrayAdapter(this,
-                                                android.R.layout.simple_list_item_1,
-                                                list);
+                                                        android.R.layout.simple_list_item_1,
+                                                        list);
 
             listView.setAdapter(arrayAdapter);
         }
     }
 
     /**
-     * Sync the list with the remote database. Get most updated comments.
+     * Sync the list with the remote database. Get most updated reviews.
      */
     private class CoursesTask extends AsyncTask<String, Void, String> {
 
@@ -139,7 +143,7 @@ public class CommentsContent extends AppCompatActivity {
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to download the list of posts, Reason: "
+                    response = "Unable to download the list of reviews, Reason: "
                             + e.getMessage();
                 }
                 finally {
@@ -167,27 +171,27 @@ public class CommentsContent extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(s);
 
                 if (jsonObject.getBoolean("success")) {
-                    mCommentList = Comment.parseCommentJSON(
+                    mReviewList = Review.parseReviewJSON(
                             jsonObject.getString("names"));
-                    if (mCommentDB == null) {
-                        mCommentDB = new CommentDB(getApplicationContext());
+                    if (mReviewDB == null) {
+                        mReviewDB = new ReviewDB(getApplicationContext());
                     }
 
                     // Delete old data so that you can refresh the local
                     // database with the network data.
-                    mCommentDB.deleteAllComments();
+                    mReviewDB.deleteAllReviews();
 
                     // Also, add to the local database
-                    for (int i = 0; i < mCommentList.size(); i++) {
-                        Comment comment = mCommentList.get(i);
-                        mCommentDB.insertComment(comment.getEmail(),
-                                comment.getThread_id(),
-                                comment.getDate(),
-                                comment.getContent());
+                    for (int i = 0; i < mReviewList.size(); i++) {
+                        Review review = mReviewList.get(i);
+                        mReviewDB.insertReview(review.getEmail(),
+                                review.getCourse_code(),
+                                review.getDate(),
+                                review.getContent());
                     }
 
-                    if (!mCommentList.isEmpty()) {
-                        setupList();
+                    if (!mReviewList.isEmpty()) {
+                        setupReviewList();
                     }
                 }
 

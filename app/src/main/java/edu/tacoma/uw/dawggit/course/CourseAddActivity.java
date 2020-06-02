@@ -22,19 +22,23 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.tacoma.uw.dawggit.R;
-import edu.tacoma.uw.dawggit.forum.Forum;
-import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
-import edu.tacoma.uw.dawggit.main.CourseReviewFragment;
 
 /**
- *
+ * Allows user to add another course to the courses to be reviewed.
  */
 public class CourseAddActivity extends AppCompatActivity {
 
     public static final String ADD_COURSE = "ADD COURSE";
 
+    /**
+     * Course JSON object.
+     */
     private JSONObject mCourseJSON;
 
+    /**
+     * Initialize view and setup listeners for buttons.
+     * @param savedInstanceState Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +99,12 @@ public class CourseAddActivity extends AppCompatActivity {
      */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * Connect to database.
+         *
+         * @param urls urls string
+         * @return return whether response to database is a success.
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -134,6 +144,10 @@ public class CourseAddActivity extends AppCompatActivity {
             return response;
         }
 
+        /**
+         * Attempts to create a json object if it false a toast is displayed.
+         * @param s JSON string.
+         */
         @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to add the new post")) {
