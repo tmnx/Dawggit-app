@@ -144,6 +144,12 @@ public class CommentDB {
             db.execSQL(CREATE_COMMENT_SQL);
         }
 
+        /**
+         * Recreate the local database.
+         * @param db local database
+         * @param oldVersion old db version
+         * @param newVersion new db version
+         */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL(DROP_COMMENT_SQL);

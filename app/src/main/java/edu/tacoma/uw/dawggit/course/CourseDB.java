@@ -132,6 +132,7 @@ public class CourseDB {
             DROP_COURSE_SQL = context.getString(R.string.DROP_COURSE_SQL);
         }
 
+
         /**
          * Create local database.
          *

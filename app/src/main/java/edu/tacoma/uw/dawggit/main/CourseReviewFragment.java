@@ -99,6 +99,7 @@ public class CourseReviewFragment extends Fragment {
     }
 
     /**
+     * Refresh connection and refresh fragment content.
      * On resume refresh course list.
      */
     @Override
@@ -157,14 +158,6 @@ public class CourseReviewFragment extends Fragment {
             public void onClick(View view) {
                 Course item = (Course) view.getTag();
                 if (mTwoPane) {
-
-//                    Bundle arguments = new Bundle();
-//                    arguments.putSerializable(CourseDetailFragment.ARG_ITEM_ID, item);
-//                    CourseDetailFragment fragment = new CourseDetailFragment();
-//                    fragment.setArguments(arguments);
-//                    mParentActivity.getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, fragment)
-//                            .commit();
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, CourseDisplayActivity.class);
@@ -280,8 +273,8 @@ public class CourseReviewFragment extends Fragment {
         }
 
         /**
-         *
-         * @param s
+         * Check if post is added successfully or not.
+         * @param s JSON string.
          */
         @Override
         protected void onPostExecute(String s) {
