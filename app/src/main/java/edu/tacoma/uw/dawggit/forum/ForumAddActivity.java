@@ -52,7 +52,7 @@ public class ForumAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forum_add);
 
         mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
-        String userEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
+        final String userEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
         Button addButton = findViewById(R.id.post);
         ImageButton finishButton = findViewById(R.id.finish);
         final EditText title = findViewById(R.id.post_title);
@@ -79,9 +79,18 @@ public class ForumAddActivity extends AppCompatActivity {
                             "Content can only have 255 characters", Toast.LENGTH_SHORT).show();
                     Log.d("ForumAddActivity", "Content is too long");
                 }
+                else if(threadTitle.trim().length() < 1) {
+                    Toast.makeText(ForumAddActivity.this,
+                            "Thread Title must contain something", Toast.LENGTH_SHORT).show();
+                    Log.d("ForumAddActivity", "Empty Thread Title");
+                }
+                else if(threadContent.trim().length() < 1) {
+                    Toast.makeText(ForumAddActivity.this,
+                            "Thread Content must contain something", Toast.LENGTH_SHORT).show();
+                    Log.d("ForumAddActivity", "Empty Content");
+                }
                 else {
                     addForum(forum);
-                    finish();
                 }
             }
         });
