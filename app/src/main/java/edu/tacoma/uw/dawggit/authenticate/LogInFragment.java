@@ -16,12 +16,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 import edu.tacoma.uw.dawggit.MainActivity;
 import edu.tacoma.uw.dawggit.R;
@@ -69,7 +72,7 @@ public class LogInFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment LogInFragment.
      */
-    public static LogInFragment newInstance(String param1, String param2) {
+    private static LogInFragment newInstance(String param1, String param2) {
         LogInFragment fragment = new LogInFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -111,70 +114,64 @@ public class LogInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Log In");
+        Objects.requireNonNull(getActivity()).setTitle("Log In");
         View view =  inflater.inflate(R.layout.fragment_log_in, container, false);
         mLoginFragmentListener = (LoginFragmentListenter) getActivity();
         final EditText emailText = view.findViewById(R.id.et_login_email);
         final EditText passwordText = view.findViewById(R.id.et_login_password);
         final Button loginButton = view.findViewById(R.id.button_login_signin);
         final Button registerButton = view.findViewById(R.id.button_login_go_to_register);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = emailText.getText().toString();
-                String pwd = passwordText.getText().toString();
-                if(TextUtils.isEmpty(email) || !email.contains("@uw.edu")) {
-                    Toast.makeText(v.getContext(), "Enter valid email address"
-                            , Toast.LENGTH_SHORT).show();
-                    emailText.requestFocus();
-                }
-                else if(TextUtils.isEmpty(pwd) || pwd.length() < 6) {
-                    Toast.makeText(v.getContext(), "Enter valid password (at least 6 characters)"
-                            , Toast.LENGTH_SHORT).show();
-                    passwordText.requestFocus();
-                }
-                else {
+        loginButton.setOnClickListener(v -> {
+            String email = emailText.getText().toString();
+            String pwd = passwordText.getText().toString();
+            if(TextUtils.isEmpty(email) || !email.contains("@uw.edu")) {
+                Toast.makeText(v.getContext(), "Enter valid email address"
+                        , Toast.LENGTH_SHORT).show();
+                emailText.requestFocus();
+            }
+            else if(TextUtils.isEmpty(pwd) || pwd.length() < 6) {
+                Toast.makeText(v.getContext(), "Enter valid password (at least 6 characters)"
+                        , Toast.LENGTH_SHORT).show();
+                passwordText.requestFocus();
+            }
+            else {
 
-                    mAuth.signInWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
-                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    // if account has been created.
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getContext(),"successful login",Toast.LENGTH_SHORT).show();
-                                        FirebaseUser user = mAuth.getCurrentUser();
+                mAuth.signInWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                // if account has been created.
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getContext(),"successful login",Toast.LENGTH_SHORT).show();
+                                    FirebaseUser user = mAuth.getCurrentUser();
 
-                                        // if email is verified, go to next activity.
-                                        if (user.isEmailVerified()) {
-
-
-
-
-
-                                            mLoginFragmentListener.login(emailText.getText().toString(),
-                                                    passwordText.getText().toString());
-                                        } else { // login is successful, but account is not verified.
-                                            Toast.makeText(getContext(), "Please verify account with email", Toast.LENGTH_SHORT).show();
-                                        }
-                                        // if sign in fails, display message to the user
-                                    } else {
-                                        Log.w("login", "signInWithEmail:failure", task.getException());
-                                        Toast.makeText(getContext(), "" + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                    // if email is verified, go to next activity.
+                                    assert user != null;
+                                    if (user.isEmailVerified()) {
+                                        mLoginFragmentListener.login(emailText.getText().toString(),
+                                                passwordText.getText().toString());
+                                    } else { // login is successful, but account is not verified.
+                                        Toast.makeText(getContext(), "Please verify account with email", Toast.LENGTH_SHORT).show();
                                     }
+                                    // if sign in fails, display message to the user
+                                } else {
+                                    Log.w("login", "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(getContext(), "" + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                 }
-                            });
-                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "Failed to login", Toast.LENGTH_SHORT).show();
+                        Log.e("LogInFragment", e.toString());
+                    }
+                });
             }
         });
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.sign_in_fragment_id, new RegisterFragment(), "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
+        registerButton.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.sign_in_fragment_id, new RegisterFragment(), "findThisFragment")
+                .addToBackStack(null)
+                .commit());
         return view;
     }
 }

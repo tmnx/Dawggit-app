@@ -3,4 +3,5 @@
     <string name="LOGIN_PREFS">edu.tacoma.uw.dawggit</string>
     <string name="LOGGEDIN">loggedin</string>
     <string name="USER_EMAIL">email</string>
+    <string name="FIREBASE_UID">uid</string>
 </resources>

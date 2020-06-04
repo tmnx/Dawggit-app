@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".review.ReviewsContent"></activity>
+        <activity android:name=".listings.ItemListingDetail"/>
+        <activity android:name=".listings.ItemListingAddActivity"/>
+        <activity android:name=".review.ReviewsContent"/>
         <activity android:name=".course.CourseAddActivity" />
         <activity android:name=".comment.CommentsContent" />
         <activity android:name=".course.CourseDisplayActivity" />
