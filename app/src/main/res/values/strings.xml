@@ -43,4 +43,5 @@
     <string name="listings_item_image_desc">Listings Image</string>
     <string name="listing_detail_image_desc">Uploaded Image</string>
     <string name="listings_add_date">Date</string>
+    <string name="your_listings">Your Listings:</string>
 </resources>

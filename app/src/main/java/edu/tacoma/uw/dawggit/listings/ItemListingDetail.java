@@ -2,6 +2,8 @@ package edu.tacoma.uw.dawggit.listings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -52,6 +54,12 @@ public class ItemListingDetail extends AppCompatActivity {
         finishButton.setOnClickListener(v -> finish());
 
         ImageButton emailButton = findViewById(R.id.listing_detail_email_button);
-        emailButton.setOnClickListener(v -> Toast.makeText(ItemListingDetail.this, "Clicked Email Button", Toast.LENGTH_SHORT).show());
+        emailButton.setOnClickListener(v -> {
+            Intent email = new Intent(Intent.ACTION_SENDTO);
+            email.putExtra(Intent.EXTRA_EMAIL, new String[]{ mItemListing.getEmail()});
+            email.putExtra(Intent.EXTRA_SUBJECT, "Buying [" + mItemListing.getTitle() + "]");
+            email.setDataAndType(Uri.parse("mailto:"), "message/rfc822");
+            startActivity(Intent.createChooser(email, "Choose an Email client :"));
+        });
     }
 }

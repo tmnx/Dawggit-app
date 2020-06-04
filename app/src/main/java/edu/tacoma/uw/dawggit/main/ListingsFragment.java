@@ -117,26 +117,6 @@ public class ListingsFragment extends Fragment {
             Log.e("ListingsFragment", "Firebase UID is null");
         }
         mStorage = FirebaseStorage.getInstance();
-//        mDatabaseRef = FirebaseDatabase.getInstance().getReference("users/" + uid + "/listings_uploads");
-//
-//        mDBListener = mDatabaseRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                mItemList.clear();
-//                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                    ItemListing item = postSnapshot.getValue(ItemListing.class);
-//                    item.setKey(postSnapshot.getKey());
-//                    mItemList.add(item);
-//                }
-//                mAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        });
-
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("users/listings");
         mDBListener = mDatabaseRef.addValueEventListener(new ValueEventListener() {
