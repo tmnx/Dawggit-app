@@ -44,4 +44,5 @@
     <string name="listing_detail_image_desc">Uploaded Image</string>
     <string name="listings_add_date">Date</string>
     <string name="your_listings">Your Listings:</string>
+    <string name="delete_post">Delete Post</string>
 </resources>
