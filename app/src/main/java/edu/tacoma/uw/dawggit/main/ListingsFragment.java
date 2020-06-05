@@ -152,9 +152,6 @@ public class ListingsFragment extends Fragment {
         private final List<ItemListing> mValues;
         private final View.OnClickListener mOnClickListener = (view) -> {
             ItemListing item = (ItemListing) view.getTag();
-//            Toast.makeText(view.getContext(),
-//                    "Item " + item.getTitle() + " Email: " + item.getEmail(),
-//                    Toast.LENGTH_SHORT).show();
             Log.i("Item Clicked", item.getTitle() + " " + item.getEmail() + " " + item.getTextBody());
 
             Intent intent = new Intent(view.getContext(), ItemListingDetail.class);

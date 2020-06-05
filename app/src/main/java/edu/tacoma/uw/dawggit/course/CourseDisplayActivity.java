@@ -201,7 +201,7 @@ public class CourseDisplayActivity extends AppCompatActivity {
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to add the new course, Reason: "
+                    response = "Unable to add the new course. Reason: "
                             + e.getMessage();
                 } finally {
                     if (urlConnection != null)
