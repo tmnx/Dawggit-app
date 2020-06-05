@@ -11,21 +11,60 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import edu.tacoma.uw.dawggit.R;
 
-public class Course  {
 
+/**
+ * Create a Course object that holds the information needed to add Course to remote
+ * database.
+ *
+ * @author Minh Nguyen
+ */
+public class Course implements Serializable {
+
+
+    /**
+     * Course code
+     */
     private String course_code;
+
+    /**
+     * Title of the course
+     */
     private String title;
+
+    /**
+     * Course content
+     */
     private String course_info;
+
+    /**
+     * User email who created the course
+     */
     private String email;
 
+    /**
+     * Course code in sql
+     */
     public static final String COURSEID = "course_code";
+
+    /**
+     * Course Title in sql
+     */
     public static final String TITLE = "title";
+
+    /**
+     * Course content in sql
+     */
     public static final String INFO = "course_info";
+
+    /**
+     * User email in sql
+     */
     public static final String EMAIL = "email";
 
     /**
@@ -43,6 +82,7 @@ public class Course  {
         email = theEmail;
     }
 
+    // GETTERS
     public String getCourse_code() {
         return course_code;
     }
@@ -59,7 +99,14 @@ public class Course  {
         return title;
     }
 
-    public static List<Course> parseCourseJSON(String courseJSON) throws JSONException {
+    /**
+     * Parse a string of JSON objects and turn them into Comments.
+     *
+     * @param courseJSON A string of JSON objects
+     * @return a list of Courses.
+     * @throws JSONException
+     */
+    public static List<Course> parseCourseReviewJSON(String courseJSON) throws JSONException {
         List<Course> courseList = new ArrayList<>();
 
         if (courseJSON != null) {
@@ -73,6 +120,7 @@ public class Course  {
                                             obj.getString(EMAIL));
                 courseList.add(course);
             }
+            Collections.reverse(courseList);
         }
         return courseList;
     }

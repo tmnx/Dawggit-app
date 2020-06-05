@@ -51,6 +51,7 @@ public class SettingFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,13 @@ public class SettingFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates the Settins view.
+     * @param inflater inflate
+     * @param container settings fragment
+     * @param savedInstanceState null
+     * @return settings fragment view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

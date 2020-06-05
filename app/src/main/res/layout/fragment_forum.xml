@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout2"
@@ -9,7 +10,6 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list"
-        android:name="edu.tacoma.uw.courseswebservicesapp.ItemListFragment"
         android:layout_width="358dp"
         android:layout_height="548dp"
         android:layout_marginStart="24dp"
@@ -18,7 +18,6 @@
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".CourseListActivity"
         tools:listitem="@layout/course_list_content" />
 
     <Button
@@ -29,6 +28,7 @@
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
         android:text="@string/add_post"
+        android:textColor="@color/uwPurple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,6 +39,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/forum"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/uwPurple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

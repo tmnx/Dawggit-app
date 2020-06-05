@@ -1,16 +1,11 @@
 package edu.tacoma.uw.dawggit.authenticate;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import edu.tacoma.uw.dawggit.MainActivity;
 import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.main.HomeActivity;
-import edu.tacoma.uw.dawggit.main.HomeFragment;
-import edu.tacoma.uw.dawggit.model.User;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +15,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +29,9 @@ import java.net.URL;
 /**
  * This activity is the entry point into our app.
  * This activity is responsible for listening to and launching the LogInFragment, and RegisterFragment.
+ * We use firebase for authentication, as well as heroku.
+ * @author Kevin Bui
+ * @author Codie Bryan
  */
 public class SignInActivity extends AppCompatActivity  implements LogInFragment.LoginFragmentListenter, RegisterFragment.RegisterFragmentListener {
 
@@ -42,8 +39,6 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
     private SharedPreferences mSharedPreferences;
     /**This variable stores JSON information from GET/POST requests*/
     private JSONObject mUserJSON;
-    private User mUser;
-    private boolean flag;
 
 
     private FirebaseAuth mAuth;
@@ -61,21 +56,22 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
         setContentView(R.layout.activity_sign_in);
 
         mAuth = FirebaseAuth.getInstance();
+        mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
 
         if (mAuth.getCurrentUser() != null) {
             // User is signed in (getCurrentUser() will be null if not signed in)
+            mSharedPreferences.edit()
+                    .putString(getString(R.string.USER_EMAIL),
+                            mAuth.getCurrentUser().getEmail()).apply();
+            mSharedPreferences = getSharedPreferences(getString(R.string.FIREBASE_UID), Context.MODE_PRIVATE);
+            mSharedPreferences.edit()
+                    .putString(getString(R.string.FIREBASE_UID),
+                            mAuth.getCurrentUser().getUid()).apply();
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
             finish();
 
         }
-
-
-
-
-
-
-
         SharedPreferences sharedPreferences =
                 getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
         sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN), false)
@@ -84,20 +80,6 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.sign_in_fragment_id, new LogInFragment())
                 .commit();
-
-        //Commented out for testing purposes.
-//        mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS),
-//                Context.MODE_PRIVATE);
-//        if(!mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.sign_in_fragment_id, new LogInFragment())
-//                    .commit();
-//        }
-//        else {
-//            Intent intent = new Intent(this, HomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
     }
 
 
@@ -118,10 +100,20 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
         try {
             mUserJSON.put("email", email);
             mUserJSON.put("password", pwd);
-//            mSharedPreferences
-//                    .edit()
-//                    .putString(getString(R.string.USER_EMAIL), email)
-//                    .apply();
+            mSharedPreferences
+                    .edit()
+                    .putString(getString(R.string.USER_EMAIL), email)
+                    .apply();
+            mSharedPreferences = getSharedPreferences(getString(R.string.FIREBASE_UID), MODE_PRIVATE);
+            if(mAuth.getCurrentUser() != null) {
+                mSharedPreferences
+                        .edit()
+                        .putString(getString(R.string.FIREBASE_UID), mAuth.getCurrentUser().getUid())
+                        .apply();
+            }
+            else {
+                Log.d("SignInActivity", "Firebase user is not valid");
+            }
             new LoginAsyncTask().execute(url.toString());
         } catch(JSONException e) {
             Toast.makeText(this, "Error with JSON creation on logging in"
@@ -296,10 +288,6 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
                 if (jsonObject.getBoolean("success")) {
                     Toast.makeText(getApplicationContext(), jsonObject.getString("message")
                             , Toast.LENGTH_SHORT).show();
-//                    mSharedPreferences
-//                            .edit()
-//                            .putBoolean(getString(R.string.LOGGEDIN), true)
-//                            .apply();
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
 
                     startActivity(i);
@@ -307,11 +295,8 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
 
                 }
                 else {
-//                    mSharedPreferences
-//                            .edit()
-//                            .remove(getString(R.string.USER_EMAIL)).apply();
-//                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-//                    Log.d("LOGIN", jsonObject.getString("message"));
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    Log.d("LOGIN", jsonObject.getString("message"));
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "JSON Parsing error on Logging In"

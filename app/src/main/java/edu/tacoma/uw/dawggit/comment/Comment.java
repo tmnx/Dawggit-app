@@ -4,19 +4,56 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comment {
+/**
+ * This class creates a comment object to hold all required information to create
+ * an entry to the database in SQL.
+ *
+ * @author Minh Nguyen
+ */
+public class Comment implements Serializable {
 
+    /**
+     * User email.
+     */
     private String email;
+
+    /**
+     * Thread identification number.
+     */
     private String thread_id;
+
+    /**
+     * The date the comment was created.
+     */
     private String date;
+
+    /**
+     * The content of the comment.
+     */
     private String content;
 
+    /**
+     * Email in sql.
+     */
     public static final String EMAIL = "email";
+
+    /**
+     * Thread id in sql.
+     */
     public static final String THREAD_ID = "thread_id";
+
+    /**
+     * Date in sql.
+     */
     public static final String DATE = "date_posted";
+
+    /**
+     * Content in sql.
+     */
     public static final String CONTENT = "content";
 
     /**
@@ -48,6 +85,7 @@ public class Comment {
         content = theContent;
     }
 
+    // GETTERS
     public String getEmail() {
         return email;
     }
@@ -64,6 +102,13 @@ public class Comment {
         return content;
     }
 
+    /**
+     * Parse a string of JSON objects and turn them into Comments.
+     *
+     * @param commentJSON string on JSON objects
+     * @return a list of comments
+     * @throws JSONException
+     */
     public static List<Comment> parseCommentJSON(String commentJSON) throws JSONException {
         List<Comment> commentList = new ArrayList<>();
 

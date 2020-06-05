@@ -28,10 +28,26 @@ import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
 
+/**
+ * Displays the comment content.
+ *
+ * @author Minh Nguyen
+ */
 public class CommentsContent extends AppCompatActivity {
 
+    /**
+     * A list of comments.
+     */
     List<Comment> mCommentList;
+
+    /**
+     * Local comment database.
+     */
     CommentDB mCommentDB;
+
+    /**
+     * The current thread the user is in.
+     */
     String mThreadID;
 
     @Override
@@ -48,9 +64,11 @@ public class CommentsContent extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
+    /**
+     * Refresh with the most updated comments.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -78,6 +96,9 @@ public class CommentsContent extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set up the list of Comments for the ListView.
+     */
     void setupList() {
         if (!mCommentList.isEmpty() && mCommentList != null) {
             ListView listView = findViewById(R.id.comments_listview);
@@ -95,7 +116,11 @@ public class CommentsContent extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sync the list with the remote database. Get most updated comments.
+     */
     private class CoursesTask extends AsyncTask<String, Void, String> {
+
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -126,6 +151,12 @@ public class CommentsContent extends AppCompatActivity {
 
         }
 
+        /**
+         * Check if the connection to the database is a success and if JSON parameter is valid.
+         *
+         * @param s is the JSON string
+         */
+        @Override
         protected void onPostExecute(String s) {
             if (s.startsWith("Unable to")) {
                 Toast.makeText(getApplicationContext(), "Unable to download" + s, Toast.LENGTH_SHORT)

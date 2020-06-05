@@ -1,5 +1,6 @@
 package edu.tacoma.uw.dawggit.course;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -7,6 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -18,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -34,7 +39,7 @@ import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.main.CourseReviewFragment;
-
+import edu.tacoma.uw.dawggit.review.ReviewsContent;
 
 
 public class searchCourseActivity extends AppCompatActivity {
@@ -44,10 +49,14 @@ public class searchCourseActivity extends AppCompatActivity {
     private List<Course> mCourseList;
     private RecyclerView mRecyclerView;
     private CourseDB mCourseDB;
+    public static final String ARG_ITEM_ID = "course_item_id";
+    private Course mCourse;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search_course);
+
 
         mCourseDB = new CourseDB(this);
 
@@ -55,7 +64,10 @@ public class searchCourseActivity extends AppCompatActivity {
 
 
 
-        setContentView(R.layout.activity_search_course);
+
+
+
+
         ImageView closeButton = findViewById(R.id.closeSearch);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +84,13 @@ public class searchCourseActivity extends AppCompatActivity {
            // DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
            // recyclerView.addItemDecoration(dividerItemDecoration);
         }
+
+
+
+
+
+
+
 
     }
 
@@ -177,7 +196,7 @@ public class searchCourseActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(s);
 
                 if (jsonObject.getBoolean("success")) {
-                    mCourseList = Course.parseCourseJSON(
+                    mCourseList = Course.parseCourseReviewJSON(
                             jsonObject.getString("names"));
                     if (mCourseDB == null) {
                         mCourseDB = new CourseDB(getApplicationContext());

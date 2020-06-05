@@ -3,8 +3,11 @@ package edu.tacoma.uw.dawggit.forum;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.tacoma.uw.dawggit.R;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,7 @@ public class ForumAddActivity extends AppCompatActivity {
      * OBject containing list of forums as JSON
      */
     private JSONObject mForumJSON;
+    private SharedPreferences mSharedPreferences;
     @Override
     /**
      * Initializes the properties for all of the buttons and text.
@@ -46,6 +50,9 @@ public class ForumAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_add);
+
+        mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
+        final String userEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
         Button addButton = findViewById(R.id.post);
         ImageButton finishButton = findViewById(R.id.finish);
         final EditText title = findViewById(R.id.post_title);
@@ -55,9 +62,36 @@ public class ForumAddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String threadTitle = title.getText().toString();
                 String threadContent = text.getText().toString();
-                Forum forum = new Forum(threadTitle, threadContent, "temp@uw.edu");
-                addForum(forum);
-                finish();
+                Forum forum = new Forum(threadTitle, threadContent, userEmail);
+                if(userEmail == null || TextUtils.isEmpty(userEmail)) {
+                    Toast.makeText(ForumAddActivity.this,
+                            "Invalid Email, Please log out and log back in",
+                            Toast.LENGTH_SHORT).show();
+                    Log.e("ForumAddActivity Email", "mSharedPreferences did not pass correct email");
+                }
+                else if(threadTitle.length() > 255) {
+                    Toast.makeText(ForumAddActivity.this,
+                            "Title can only have 255 characters", Toast.LENGTH_SHORT).show();
+                    Log.d("ForumAddActivity", "Title is too long");
+                }
+                else if(threadContent.length() > 255) {
+                    Toast.makeText(ForumAddActivity.this,
+                            "Content can only have 255 characters", Toast.LENGTH_SHORT).show();
+                    Log.d("ForumAddActivity", "Content is too long");
+                }
+                else if(threadTitle.trim().length() < 1) {
+                    Toast.makeText(ForumAddActivity.this,
+                            "Thread Title must contain something", Toast.LENGTH_SHORT).show();
+                    Log.d("ForumAddActivity", "Empty Thread Title");
+                }
+                else if(threadContent.trim().length() < 1) {
+                    Toast.makeText(ForumAddActivity.this,
+                            "Thread Content must contain something", Toast.LENGTH_SHORT).show();
+                    Log.d("ForumAddActivity", "Empty Content");
+                }
+                else {
+                    addForum(forum);
+                }
             }
         });
         finishButton.setOnClickListener(new View.OnClickListener() {

@@ -7,7 +7,7 @@
     <string name="et_register_hint_first_name">Enter your first name</string>
     <string name="et_register_hint_last_name">Enter your last name</string>
     <string name="et_register_hint_username">Enter your username</string>
-    <string name="et_register_hint_email">Enter your email</string>
+    <string name="et_register_hint_email">Enter your UW email</string>
     <string name="et_register_hint_password">Enter your password</string>
     <string name="button_text_register">Confirm Registration</string>
     <string name="tv_register">Register New Account</string>

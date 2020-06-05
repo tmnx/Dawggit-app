@@ -184,6 +184,7 @@ public class ForumFragment extends Fragment {
 //                            .commit();
                 } else {
                     Context context = view.getContext();
+//                    Toast.makeText(context, "Course review clicked " + context.toString(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, ForumDisplayActivity.class);
                     intent.putExtra(ForumDisplayActivity.ARG_ITEM_ID, item);
                     context.startActivity(intent);

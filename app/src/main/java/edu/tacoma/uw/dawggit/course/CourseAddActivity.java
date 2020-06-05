@@ -6,6 +6,8 @@ import androidx.core.view.MenuItemCompat;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,19 +35,24 @@ import java.net.URL;
 
 import edu.tacoma.uw.dawggit.MainActivity;
 import edu.tacoma.uw.dawggit.R;
-import edu.tacoma.uw.dawggit.forum.Forum;
-import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
-import edu.tacoma.uw.dawggit.main.CourseReviewFragment;
 
 
+/**
+ * Allows user to add another course to the courses to be reviewed.
+ */
 public class CourseAddActivity extends AppCompatActivity {
-
-//    public static final String ARG_ITEM_ID = "item_id";
 
     public static final String ADD_COURSE = "ADD COURSE";
 
+    /**
+     * Course JSON object.
+     */
     private JSONObject mCourseJSON;
 
+    /**
+     * Initialize view and setup listeners for buttons.
+     * @param savedInstanceState Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,14 +63,18 @@ public class CourseAddActivity extends AppCompatActivity {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finish();   // close add activity
             }
         });
 
+        // Get user inputs
         final EditText CIDtext = findViewById(R.id.editCourseID);
         final EditText titleText = findViewById(R.id.editCourseTitle);
         final EditText infoText = findViewById(R.id.editCourseInfo);
 
+
+
+        // Add course to database
         Button addButton = findViewById(R.id.addCourse);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +82,14 @@ public class CourseAddActivity extends AppCompatActivity {
                 String course_code = CIDtext.getText().toString();
                 String title = titleText.getText().toString();
                 String info = infoText.getText().toString();
-                Course course = new Course(course_code, title, info, "tmn1014@uw.edu");
+
+                // Get user email to compare to the user that created the course
+                SharedPreferences myPrefs = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
+                final String userEmail = myPrefs.getString(getString(R.string.USER_EMAIL), null);
+
+                Course course = new Course(course_code, title, info, userEmail);
                 addCourse(course);
-                finish();
+//                finish();
             }
         });
 
@@ -96,6 +112,11 @@ public class CourseAddActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Add course to remote database.
+     *
+     * @param course the course to be added.
+     */
     public void addCourse(Course course) {
         StringBuilder url = new StringBuilder(getString(R.string.add_course));
         mCourseJSON = new JSONObject();
@@ -114,10 +135,17 @@ public class CourseAddActivity extends AppCompatActivity {
     }
 
 
-
-
-
+    /**
+     * Helper class to sync the app with the remote database.
+     */
     private class AddCourseAsyncTask extends AsyncTask<String, Void, String> {
+
+        /**
+         * Connect to database.
+         *
+         * @param urls urls string
+         * @return return whether response to database is a success.
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -157,21 +185,24 @@ public class CourseAddActivity extends AppCompatActivity {
             return response;
         }
 
+        /**
+         * Attempts to create a json object if it false a toast is displayed.
+         * @param s JSON string.
+         */
         @Override
         protected void onPostExecute(String s) {
-            if (s.startsWith("Unable to add the new post")) {
+            if (s.startsWith("Unable to add the new Course")) {
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                 return;
             }
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 if (jsonObject.getBoolean("success")) {
-                    Toast.makeText(getApplicationContext(), "Post Added successfully"
+                    Toast.makeText(getApplicationContext(), "Course added successfully"
                             , Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Post couldn't be added: "
-                                    + jsonObject.getString("error")
+                    Toast.makeText(getApplicationContext(), "Course couldn't be added"
                             , Toast.LENGTH_LONG).show();
                     Log.e(ADD_COURSE, jsonObject.getString("error"));
                 }
