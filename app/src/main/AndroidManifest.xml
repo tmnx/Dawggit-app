@@ -7,12 +7,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/dawggit"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/dawggit"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".course.CourseAddActivity"></activity>
+        <activity android:name=".course.searchCourseActivity" />
+        <activity android:name=".course.CourseAddActivity" />
         <activity android:name=".comment.CommentsContent" />
         <activity android:name=".comment.CommentAddActivity" />
         <activity android:name=".review.ReviewAddActivity" />

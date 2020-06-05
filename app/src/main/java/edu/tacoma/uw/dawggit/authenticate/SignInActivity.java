@@ -43,6 +43,8 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
     /**This variable stores JSON information from GET/POST requests*/
     private JSONObject mUserJSON;
     private User mUser;
+    private boolean flag;
+
 
     private FirebaseAuth mAuth;
 
@@ -51,6 +53,8 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
      * Otherwise, the LogInFragment is launched and the user will have to login.
      * @param savedInstanceState null
      */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +103,6 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
 
 
 
-
     /**
      * A POST request will be sent to https://dawggit.herokuapp.com/login
      * to check if the user account exists.
@@ -108,6 +111,8 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
      */
     @Override
     public void login(String email, String pwd) {
+
+
         StringBuilder url = new StringBuilder(getString(R.string.post_login));
         mUserJSON = new JSONObject();
         try {
@@ -133,6 +138,7 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
      */
     @Override
     public void registerNewAccount(String username, String email, String password) {
+
         StringBuilder url = new StringBuilder(getString(R.string.post_register));
         mUserJSON = new JSONObject();
         try {
@@ -295,8 +301,10 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
 //                            .putBoolean(getString(R.string.LOGGEDIN), true)
 //                            .apply();
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+
                     startActivity(i);
                     finish();
+
                 }
                 else {
 //                    mSharedPreferences

@@ -47,6 +47,7 @@ public class LogInFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private boolean flag;
     /**Allows information to be passed from this fragment back into SignInActivity*/
     private LoginFragmentListenter mLoginFragmentListener;
 
@@ -78,10 +79,15 @@ public class LogInFragment extends Fragment {
         return fragment;
     }
 
+    public boolean getFlag() {
+        return flag;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        flag = false;
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -114,6 +120,30 @@ public class LogInFragment extends Fragment {
         final EditText passwordText = view.findViewById(R.id.et_login_password);
         final Button loginButton = view.findViewById(R.id.button_login_signin);
         final Button registerButton = view.findViewById(R.id.button_login_go_to_register);
+        final Button forgotButton = view.findViewById(R.id.button_forgot);
+        forgotButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailText.getText().toString();
+
+                if(TextUtils.isEmpty(email) || !email.contains("@uw.edu")) {
+                    Toast.makeText(v.getContext(), "Enter valid email address"
+                            , Toast.LENGTH_SHORT).show();
+                    emailText.requestFocus();
+                }
+                else {
+
+                    mAuth.sendPasswordResetEmail(emailText.getText().toString());
+                    Toast.makeText(v.getContext(), "Email Sent. Please cheack finbox."
+                            , Toast.LENGTH_SHORT).show();
+                    emailText.requestFocus();
+
+
+
+
+                }
+            }
+        });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,12 +173,15 @@ public class LogInFragment extends Fragment {
                                         // if email is verified, go to next activity.
                                         if (user.isEmailVerified()) {
 
+                                            flag = true;
+
 
 
 
 
                                             mLoginFragmentListener.login(emailText.getText().toString(),
                                                     passwordText.getText().toString());
+
                                         } else { // login is successful, but account is not verified.
                                             Toast.makeText(getContext(), "Please verify account with email", Toast.LENGTH_SHORT).show();
                                         }
