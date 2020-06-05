@@ -45,4 +45,5 @@
     <string name="listings_add_date">Date</string>
     <string name="your_listings">Your Listings:</string>
     <string name="delete_post">Delete Post</string>
+    <string name="deleteCourse">Delete Course</string>
 </resources>
