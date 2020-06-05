@@ -50,6 +50,7 @@ public class ItemListingDetail extends AppCompatActivity {
             TextView textBodyTextView = findViewById(R.id.listing_detail_body);
             TextView dateTextView = findViewById(R.id.listing_detail_date);
             ImageView imageView = findViewById(R.id.listing_detail_imageView);
+            TextView emailTextView = findViewById(R.id.listing_detail_email);
 
             titleTextView.setText((mItemListing.getTitle()));
             DecimalFormat decForm = new DecimalFormat("0.00");
@@ -59,6 +60,7 @@ public class ItemListingDetail extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
             String date = sdf.format(mItemListing.getDate());
             dateTextView.setText(date);
+            emailTextView.setText("Contact: " + mItemListing.getEmail());
             Picasso.get().load(mItemListing.getUrl()).into(imageView);
         }
         ImageButton finishButton = findViewById(R.id.listing_detail_finish);

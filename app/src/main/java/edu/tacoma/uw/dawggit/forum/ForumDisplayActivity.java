@@ -49,6 +49,10 @@ public class ForumDisplayActivity extends AppCompatActivity {
      * Forum being displayed by this activity.
      */
     private Forum mForum;
+
+    /**
+     * JSON object of forum info
+     */
     private JSONObject mJson;
 
     /**

@@ -178,6 +178,7 @@ public class ListingsFragment extends Fragment {
         private final List<ItemListing> mValues;
         private final View.OnClickListener mOnClickListener = (view) -> { //Launches ItemListingDetail.java
             ItemListing item = (ItemListing) view.getTag();
+            Log.i("Item Clicked", item.getTitle() + " " + item.getEmail() + " " + item.getTextBody());
             Intent intent = new Intent(view.getContext(), ItemListingDetail.class);
             intent.putExtra("ARG_ITEM_ID", item);
             view.getContext().startActivity(intent);
