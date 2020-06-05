@@ -40,6 +40,7 @@
         android:layout_marginRight="16dp"
         android:text="@string/listing_detail_title_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/uwPurple"
         app:layout_constraintBottom_toTopOf="@+id/listing_detail_imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

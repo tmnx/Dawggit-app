@@ -74,6 +74,7 @@
         android:layout_marginEnd="152dp"
         android:layout_marginRight="152dp"
         android:text="@string/addCourseReview"
+        android:textColor="@color/uwPurple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editCourseInfo" />
 

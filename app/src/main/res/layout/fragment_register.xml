@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tv_register"
+            android:textColor="@color/uwPurple"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,10 +64,12 @@
             android:hint="@string/et_register_hint_password"
             android:autofillHints="@string/et_register_hint_password"
             android:inputType="textPassword"/>
+
         <Button
+            android:id="@+id/button_register_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_register_confirm"
-            android:text="@string/button_text_register"/>
+            android:text="@string/button_text_register"
+            android:textColor="@color/uwPurple" />
     </LinearLayout>
 </FrameLayout>
