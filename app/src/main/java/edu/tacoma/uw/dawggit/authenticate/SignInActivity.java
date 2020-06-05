@@ -1,16 +1,11 @@
 package edu.tacoma.uw.dawggit.authenticate;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import edu.tacoma.uw.dawggit.MainActivity;
 import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.main.HomeActivity;
-import edu.tacoma.uw.dawggit.main.HomeFragment;
-import edu.tacoma.uw.dawggit.model.User;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +15,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +29,9 @@ import java.net.URL;
 /**
  * This activity is the entry point into our app.
  * This activity is responsible for listening to and launching the LogInFragment, and RegisterFragment.
+ * We use firebase for authentication, as well as heroku.
+ * @author Kevin Bui
+ * @author Codie Bryan
  */
 public class SignInActivity extends AppCompatActivity  implements LogInFragment.LoginFragmentListenter, RegisterFragment.RegisterFragmentListener {
 
@@ -42,7 +39,6 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
     private SharedPreferences mSharedPreferences;
     /**This variable stores JSON information from GET/POST requests*/
     private JSONObject mUserJSON;
-    private User mUser;
 
     private FirebaseAuth mAuth;
 

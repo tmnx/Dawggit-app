@@ -36,6 +36,8 @@ import edu.tacoma.uw.dawggit.main.HomeFragment;
  * A simple {@link Fragment} subclass.
  * Use the {@link LogInFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * @author Kevin Bui
+ * @author Codie Bryan
  */
 public class LogInFragment extends Fragment {
 
