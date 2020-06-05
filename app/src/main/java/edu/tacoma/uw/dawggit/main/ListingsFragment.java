@@ -3,19 +3,17 @@ package edu.tacoma.uw.dawggit.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,64 +36,78 @@ import java.util.Objects;
 
 import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.listings.ItemListing;
+import edu.tacoma.uw.dawggit.listings.ItemListingAddActivity;
 import edu.tacoma.uw.dawggit.listings.ItemListingDetail;
 
 /**
- * Fragment Home page for the application
- * @version Sprint 2
- * @author Sean Smith, Kevin Bui
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ListingsFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class ListingsFragment extends Fragment {
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     private RecyclerView mRecyclerView;
     private List<ItemListing> mItemList;
-    private HomeListingsAdapter mAdapter;
+    private GridItemRecyclerViewAdapter mAdapter;
     private SharedPreferences mSharedPreferences;
     private Button mAddButton;
 
     private FirebaseStorage mStorage;
     private DatabaseReference mDatabaseRef;
     private ValueEventListener mDBListener;
-    /**
-     *
-     */
-    public HomeFragment() {
+
+
+    private String mParam1;
+    private String mParam2;
+
+    public ListingsFragment() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment HomeFragment.
+     * @return A new instance of fragment TabGridFragment.
      */
-    static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-
-        return fragment;
+    static ListingsFragment newInstance() {
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+        return new ListingsFragment();
     }
 
-    /**
-     *
-     * @param inflater Required object to generate a view.
-     * @param container Required object to generate a view.
-     * @param savedInstanceState Used to save the state.
-     * @return Generated view.
-     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.home_page_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_listings, container, false);
+
 
         mItemList = new ArrayList<>();
-        mAdapter = new HomeListingsAdapter(mItemList);
-        mRecyclerView = v.findViewById(R.id.home_listings_recycler_view);
+        mAdapter = new GridItemRecyclerViewAdapter(mItemList);
+        mRecyclerView = view.findViewById(R.id.listings_list);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext()), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(Objects.requireNonNull(getContext())));
+        int numberOfColumns = 2;
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
         mSharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.FIREBASE_UID),
@@ -105,8 +117,8 @@ public class HomeFragment extends Fragment {
             Log.e("ListingsFragment", "Firebase UID is null");
         }
         mStorage = FirebaseStorage.getInstance();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("users/" + uid + "/listings_uploads");
 
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("users/listings");
         mDBListener = mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -125,13 +137,19 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        return v;
 
+        mAddButton = view.findViewById(R.id.button_fragment_listings_add);
+        mAddButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ItemListingAddActivity.class);
+            startActivity(intent);
+        });
+        return view;
     }
 
-    public class HomeListingsAdapter extends RecyclerView.Adapter<HomeListingsAdapter.ViewHolder> {
+    public class GridItemRecyclerViewAdapter
+            extends RecyclerView.Adapter<GridItemRecyclerViewAdapter.ViewHolder> {
 
-        private List<ItemListing> mValues;
+        private final List<ItemListing> mValues;
         private final View.OnClickListener mOnClickListener = (view) -> {
             ItemListing item = (ItemListing) view.getTag();
             Toast.makeText(view.getContext(),
@@ -144,33 +162,34 @@ public class HomeFragment extends Fragment {
             view.getContext().startActivity(intent);
         };
 
-        HomeListingsAdapter(List<ItemListing> itemList) {
-            this.mValues = itemList;
+        GridItemRecyclerViewAdapter(List<ItemListing> items) {
+            mValues = items;
         }
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_home_listings_item, parent, false);
+                    .inflate(R.layout.fragment_listing_item, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull HomeListingsAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             ItemListing currentItem = mValues.get(position);
+            holder.mIdView.setText(mValues.get(position).getTitle());
+            double price = mValues.get(position).getPrice();
+            DecimalFormat decForm = new DecimalFormat("0.00");
+            String priceFormat = "$" + decForm.format(price);
+            holder.mContentView.setText(priceFormat);
+
             String imageUrl = currentItem.getUrl();
             Picasso.get().load(imageUrl)
                     .placeholder(R.mipmap.ic_launcher)
                     .fit()
                     .centerCrop()
                     .into(holder.mImageView);
-            holder.mTextTitle.setText(currentItem.getTitle());
-            holder.mTextBody.setText(currentItem.getTextBody());
 
-            holder.itemView.setTag(mValues.get(position));
-            //holder.itemView.setOnClickListener(mOnClickListener);
-            //holder.itemView.setOnCreateContextMenuListener(m);
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -182,35 +201,16 @@ public class HomeFragment extends Fragment {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            private ImageView mImageView;
-            private TextView mTextTitle;
-            private TextView mTextBody;
+            final TextView mIdView;
+            final TextView mContentView;
+            final ImageView mImageView;
 
-            ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                mImageView = itemView.findViewById(R.id.home_listings_item_image);
-                mTextTitle = itemView.findViewById(R.id.home_listings_item_title);
-                mTextBody = itemView.findViewById(R.id.home_listings_item_body);
+            ViewHolder(View view) {
+                super(view);
+                mIdView = view.findViewById(R.id.tv_fragment_listing_item_title);
+                mContentView = view.findViewById(R.id.tv_fragment_listing_item_price);
+                mImageView = view.findViewById(R.id.imageView_fragment_listing_item_image);
             }
-
-//            private final View.OnCreateContextMenuListener mContextListener = (menu, view, menuInfo) -> {
-//                menu.setHeaderTitle("Actions");
-//                MenuItem deleteMenuItem = menu.add(Menu.NONE, 1, 1, "Delete");
-//                deleteMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        int position = getAdapterPosition();
-//                        if(position != RecyclerView.NO_POSITION) {
-//                            if(position == 1) {
-//                                deleteItemListing(position);
-//                                return true;
-//                            }
-//                        }
-//                        return false;
-//                    }
-//                });
-//            };
         }
     }
-
 }

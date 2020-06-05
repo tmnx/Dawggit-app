@@ -10,4 +10,5 @@
     <string name="get_reviews">https://dawggit.herokuapp.com/review?course_code=</string>
     <string name="add_course">https://dawggit.herokuapp.com/addcourse</string>
     <string name="get_courses">https://dawggit.herokuapp.com/courses</string>
+    <string name="delete_thread">https://dawggit.herokuapp.com/deletethread</string>
 </resources>

@@ -63,9 +63,11 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
             // User is signed in (getCurrentUser() will be null if not signed in)
             mSharedPreferences.edit()
                     .putString(getString(R.string.USER_EMAIL),
-                            mAuth.getCurrentUser().getEmail()).commit();
-            String prefEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
-            String email = mAuth.getCurrentUser().getEmail();
+                            mAuth.getCurrentUser().getEmail()).apply();
+            mSharedPreferences = getSharedPreferences(getString(R.string.FIREBASE_UID), Context.MODE_PRIVATE);
+            mSharedPreferences.edit()
+                    .putString(getString(R.string.FIREBASE_UID),
+                            mAuth.getCurrentUser().getUid()).apply();
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
             finish();
@@ -102,6 +104,16 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
                     .edit()
                     .putString(getString(R.string.USER_EMAIL), email)
                     .apply();
+            mSharedPreferences = getSharedPreferences(getString(R.string.FIREBASE_UID), MODE_PRIVATE);
+            if(mAuth.getCurrentUser() != null) {
+                mSharedPreferences
+                        .edit()
+                        .putString(getString(R.string.FIREBASE_UID), mAuth.getCurrentUser().getUid())
+                        .apply();
+            }
+            else {
+                Log.d("SignInActivity", "Firebase user is not valid");
+            }
             new LoginAsyncTask().execute(url.toString());
         } catch(JSONException e) {
             Toast.makeText(this, "Error with JSON creation on logging in"
@@ -275,18 +287,11 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
                 if (jsonObject.getBoolean("success")) {
                     Toast.makeText(getApplicationContext(), jsonObject.getString("message")
                             , Toast.LENGTH_SHORT).show();
-//                    mSharedPreferences
-//                            .edit()
-//                            .putBoolean(getString(R.string.LOGGEDIN), true)
-//                            .apply();
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(i);
                     finish();
                 }
                 else {
-//                    mSharedPreferences
-//                            .edit()
-//                            .remove(getString(R.string.USER_EMAIL)).apply();
                     Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     Log.d("LOGIN", jsonObject.getString("message"));
                 }

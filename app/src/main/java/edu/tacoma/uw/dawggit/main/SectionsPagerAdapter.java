@@ -2,6 +2,7 @@ package edu.tacoma.uw.dawggit.main;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
@@ -28,7 +29,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
      */
     private final Context mContext;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
 
@@ -39,6 +40,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
      * @param position Tab that is being generated
      * @return A new instance of a fragment
      */
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -50,7 +52,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             return ForumFragment.newInstance();
         }
         else if(position == 2) {
-            //Listings here
+            return ListingsFragment.newInstance();
         }
         else if(position == 3) {
             //Reviews here
