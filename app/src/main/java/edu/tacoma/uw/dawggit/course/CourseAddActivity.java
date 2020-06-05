@@ -67,7 +67,7 @@ public class CourseAddActivity extends AppCompatActivity {
                 String info = infoText.getText().toString();
                 Course course = new Course(course_code, title, info, "tmn1014@uw.edu");
                 addCourse(course);
-                finish();
+//                finish();
             }
         });
     }
@@ -150,19 +150,18 @@ public class CourseAddActivity extends AppCompatActivity {
          */
         @Override
         protected void onPostExecute(String s) {
-            if (s.startsWith("Unable to add the new post")) {
+            if (s.startsWith("Unable to add the new Course")) {
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                 return;
             }
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 if (jsonObject.getBoolean("success")) {
-                    Toast.makeText(getApplicationContext(), "Post Added successfully"
+                    Toast.makeText(getApplicationContext(), "Course added successfully"
                             , Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Post couldn't be added: "
-                                    + jsonObject.getString("error")
+                    Toast.makeText(getApplicationContext(), "Course couldn't be added"
                             , Toast.LENGTH_LONG).show();
                     Log.e(ADD_COURSE, jsonObject.getString("error"));
                 }
