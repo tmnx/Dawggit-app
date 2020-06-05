@@ -1,9 +1,6 @@
 package edu.tacoma.uw.dawggit.main;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +9,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +22,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,20 +39,29 @@ import edu.tacoma.uw.dawggit.listings.ItemListingDetail;
  * A simple {@link Fragment} subclass.
  * Use the {@link ListingsFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * @author Kevin Bui
  */
 public class ListingsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    /** Recyclerv view.*/
     private RecyclerView mRecyclerView;
+
+    /** List of recycler view item listings.*/
     private List<ItemListing> mItemList;
+
+    /** Recyclerview adapter.*/
     private GridItemRecyclerViewAdapter mAdapter;
-    private SharedPreferences mSharedPreferences;
+
+    /** Button to add new Item Listings.*/
     private Button mAddButton;
 
-    private FirebaseStorage mStorage;
+    /** Reference to the firebase database.*/
     private DatabaseReference mDatabaseRef;
+
+    /** Listens to when data changes in the firebase database.*/
     private ValueEventListener mDBListener;
 
 
@@ -92,6 +97,17 @@ public class ListingsFragment extends Fragment {
 
     }
 
+    /**
+     * Creates the view for the listings tab.
+     *
+     * Shows a list of all listings from all users.
+     *
+     * Users are able to add new listings, or click on different items to see details.
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState null
+     * @return View
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,16 +126,8 @@ public class ListingsFragment extends Fragment {
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mSharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences(getString(R.string.FIREBASE_UID),
-                Context.MODE_PRIVATE);
-        String uid = mSharedPreferences.getString(getString(R.string.FIREBASE_UID), null);
-        if(uid == null) {
-            Log.e("ListingsFragment", "Firebase UID is null");
-        }
-        mStorage = FirebaseStorage.getInstance();
-
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("users/listings");
-        mDBListener = mDatabaseRef.addValueEventListener(new ValueEventListener() {
+         mDBListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mItemList.clear();
@@ -129,14 +137,18 @@ public class ListingsFragment extends Fragment {
                     item.setKey(postSnapshot.getKey());
                     mItemList.add(item);
                 }
+                Collections.reverse(mItemList);
                 mAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
-        });
+        };
+
+        mDatabaseRef.addListenerForSingleValueEvent(mDBListener);
 
         mAddButton = view.findViewById(R.id.button_fragment_listings_add);
         mAddButton.setOnClickListener(v -> {
@@ -146,23 +158,46 @@ public class ListingsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * We have to remove the listener when the HomeActivity is destroyed.
+     * The listener will call onCancelled when the user signs out of the app,
+     * unless the listener is removed here.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDatabaseRef.removeEventListener(mDBListener);
+    }
+
+    /**
+     * Adapter for the recycler view.
+     */
     public class GridItemRecyclerViewAdapter
             extends RecyclerView.Adapter<GridItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<ItemListing> mValues;
-        private final View.OnClickListener mOnClickListener = (view) -> {
+        private final View.OnClickListener mOnClickListener = (view) -> { //Launches ItemListingDetail.java
             ItemListing item = (ItemListing) view.getTag();
             Log.i("Item Clicked", item.getTitle() + " " + item.getEmail() + " " + item.getTextBody());
-
             Intent intent = new Intent(view.getContext(), ItemListingDetail.class);
             intent.putExtra("ARG_ITEM_ID", item);
             view.getContext().startActivity(intent);
         };
 
+        /**
+         * Constructor
+         * @param items a list of item listings.
+         */
         GridItemRecyclerViewAdapter(List<ItemListing> items) {
             mValues = items;
         }
 
+        /**
+         * Inflates the fragment_listing_item
+         * @param parent parent
+         * @param viewType viewType
+         * @return ViewHolder
+         */
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -171,6 +206,11 @@ public class ListingsFragment extends Fragment {
             return new ViewHolder(view);
         }
 
+        /**
+         * Binds each item in the recyler list to the view holder.
+         * @param holder ViewHolder
+         * @param position int
+         */
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             ItemListing currentItem = mValues.get(position);
@@ -192,16 +232,28 @@ public class ListingsFragment extends Fragment {
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
+        /**
+         * Returns the size of the list.
+         * @return int
+         */
         @Override
         public int getItemCount() {
             return mValues.size();
         }
 
+
+        /**
+         * ViewHolder
+         */
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView mIdView;
             final TextView mContentView;
             final ImageView mImageView;
 
+            /**
+             * View Holder constructor.
+             * @param view View
+             */
             ViewHolder(View view) {
                 super(view);
                 mIdView = view.findViewById(R.id.tv_fragment_listing_item_title);

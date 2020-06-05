@@ -1,29 +1,36 @@
 package edu.tacoma.uw.dawggit.listings;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.widget.Toast;
+
 
 import com.google.firebase.database.Exclude;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import edu.tacoma.uw.dawggit.R;
-
+/**
+ * Represents an item a user wants to sell.
+ * @version Sprint 2
+ * @author Kevin Bui
+ */
 public class ItemListing implements Serializable {
+    /** The user's email who created this item listing.*/
     private String mUserEmail;
+
+    /** The title of this item.*/
     private String mTitle;
+
+    /** The description of this item.*/
     private String mTextBody;
+
+    /** The date that this item was created.*/
     private Date mDate;
+
+    /** The price of this item.*/
     private Double mPrice;
+
+    /** The Firebase URL where the image of this item is stored.*/
     private String mImageUrl;
+
+    /** The Firebase unique identifier of this item stored in the Firebase Realtime Database*/
     private String mKey;
 
     /**
@@ -34,7 +41,7 @@ public class ItemListing implements Serializable {
     }
 
     /**
-     * Constructor
+     * Constructor for ItemListing
      * @param userEmail String
      * @param title String
      * @param textBody String
@@ -82,9 +89,17 @@ public class ItemListing implements Serializable {
     public void setUrl(String url) { this.mImageUrl = url; }
 
 
+    /**
+     * Unique key representing an entry in the Firebase Realtime Database.
+     * @return String key
+     */
     @Exclude
     public String getKey() {return this.mKey;}
 
+    /**
+     * Sets the unique key of this item to another key in regards to the Firebase Realtime Database.
+     * @param key Sets this items unique firebase key to key
+     */
     @Exclude
     public void setKey(String key) {mKey = key;}
 

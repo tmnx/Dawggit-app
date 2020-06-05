@@ -45,33 +45,63 @@ import java.util.Locale;
 
 import edu.tacoma.uw.dawggit.R;
 
+/**
+ * Allows users to add item listings to the Firebase Realtime Database,
+ * and stores item images in Firebase Storage.
+ * @version Sprint 2
+ * @author Kevin Bui
+ */
 public class ItemListingAddActivity extends AppCompatActivity {
 
+    /** Used for choosing images from the device.*/
     private static final int PICK_IMAGE_REQUEST = 1;
+
+    /** Used to access the current user's email.*/
     private SharedPreferences mSharedPreferences;
 
+    /** Button to choose images.*/
     private ImageButton mImageButtonChooseImage;
+
+    /** Button to submit a new item listing.*/
     private Button mButtonNewListing;
+
+    /** Button to exit out of the activity.*/
     private ImageButton mFinishButton;
 
+    /** Editable title.*/
     private EditText mTitle;
+
+    /** Editable description of the item listing.*/
     private EditText mDescription;
+
+    /** Editable price of the item listing.*/
     private EditText mPrice;
 
+    /** Date that the item listing was created.*/
     private Date mDate;
+
+    /** File path of the image.*/
     private Uri mImageUri;
 
+    /** Reference to the Firebase storage to store images.*/
     private StorageReference mStorageReference;
+
+    /** Reference to the Firebase Realtime Database to store the item listing.*/
     private DatabaseReference mDatabaseReference;
+
+    /** Task to upload the newly created item listing to Firebase*/
     private StorageTask mUploadTask;
 
+    /**
+     *
+     * @param savedInstanceState null
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_listing_add);
 
         mSharedPreferences = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
-        //String userEmail = mSharedPreferences.getString(getString(R.string.USER_EMAIL), null);
         mImageButtonChooseImage = findViewById(R.id.imageButton);
         mButtonNewListing = findViewById(R.id.button_listing_new_post);
         mFinishButton = findViewById(R.id.listing_add_finish_button);
@@ -86,28 +116,26 @@ public class ItemListingAddActivity extends AppCompatActivity {
         dateTextView.setText(date);
 
         mSharedPreferences = getSharedPreferences(getString(R.string.FIREBASE_UID), MODE_PRIVATE);
-        String uid = mSharedPreferences.getString(getString(R.string.FIREBASE_UID), null);
-        if(uid == null) {
-            Log.e("ItemListingAddActivity", "Shared preferences did not pass Firebase UID");
-        }
-        mStorageReference = FirebaseStorage.getInstance().getReference("listings_uploads");
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("users/" + uid + "/listings_uploads");
+
+        mStorageReference = FirebaseStorage.getInstance().getReference("listings_images");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("users/listings");
 
         mImageButtonChooseImage.setOnClickListener(v -> openFileChooser());
 
-        mButtonNewListing.setOnClickListener(v -> {
+        mButtonNewListing.setOnClickListener(v -> { //Adds a new item to the firebase database.
             if(mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(ItemListingAddActivity.this, "Upload in Progress", Toast.LENGTH_SHORT).show();
             }
             else {
-                boolean validUpload = uploadFile();
-                if(validUpload && mUploadTask.isComplete()) {
-                    finish();
-                }
+                boolean validUpload = uploadItemListing();
+//                if(validUpload && mUploadTask.isComplete()) {
+//                    finish();
+//                }
+                finish();
             }
         });
 
-        mFinishButton.setOnClickListener(v -> {
+        mFinishButton.setOnClickListener(v -> { //Exits the activity.
             if(mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(ItemListingAddActivity.this, "Upload in Progress", Toast.LENGTH_SHORT).show();
             }
@@ -117,6 +145,9 @@ public class ItemListingAddActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *
+     */
     private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -124,6 +155,12 @@ public class ItemListingAddActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    /**
+     * Gets the file path for the selected image.
+     * @param requestCode request code
+     * @param resultCode result code
+     * @param data Returns an Image
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,8 +169,8 @@ public class ItemListingAddActivity extends AppCompatActivity {
             && data != null && data.getData() != null) {
             mImageUri = data.getData();
 
-            //Picasso.get().load(mImageUri).into(mImageButtonChooseImage);
-            mImageButtonChooseImage.setImageURI(mImageUri);
+            Picasso.get().load(mImageUri).into(mImageButtonChooseImage);
+            //mImageButtonChooseImage.setImageURI(mImageUri);
         }
         else if (resultCode != RESULT_OK) {
             Toast.makeText(this, "Result Code: " + resultCode, Toast.LENGTH_SHORT).show();
@@ -146,13 +183,22 @@ public class ItemListingAddActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gets the file extension of images.
+     * @param uri image uri
+     * @return string of file extension
+     */
     private String getFileExtension(Uri uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
-    private boolean uploadFile() {
+    /**
+     * Uploads the newly created item listing to Firebase.
+     * @return boolean, if the upload was successful or not.
+     */
+    private boolean uploadItemListing() {
         if(TextUtils.isEmpty(mTitle.getText())) {
             Toast.makeText(ItemListingAddActivity.this, "Title is Required", Toast.LENGTH_SHORT).show();
             mTitle.requestFocus();
@@ -188,19 +234,12 @@ public class ItemListingAddActivity extends AppCompatActivity {
                             String title = mTitle.getText().toString();
                             String description = mDescription.getText().toString();
                             Double price = Double.parseDouble(mPrice.getText().toString());
-//                            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-//                            String date = sdf.format(new Date());
                             assert userEmail != null;
                             assert downloadUrl != null;
                             ItemListing itemListing = new ItemListing(userEmail, title, description, price, mDate, downloadUrl.toString());
                             String uploadId = mDatabaseReference.push().getKey();
                             assert uploadId != null;
                             mDatabaseReference.child(uploadId).setValue(itemListing);
-
-                            DatabaseReference listingsRef = FirebaseDatabase.getInstance().getReference("users/listings");
-                            String listingsUploadId = listingsRef.push().getKey();
-                            assert listingsUploadId != null;
-                            listingsRef.child(listingsUploadId).setValue(itemListing);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
