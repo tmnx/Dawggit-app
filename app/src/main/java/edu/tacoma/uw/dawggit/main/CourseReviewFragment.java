@@ -47,6 +47,7 @@ import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.course.Course;
 import edu.tacoma.uw.dawggit.course.CourseAddActivity;
 import edu.tacoma.uw.dawggit.course.CourseDB;
+import edu.tacoma.uw.dawggit.course.CourseDisplayActivity;
 
 import edu.tacoma.uw.dawggit.course.CourseDisplayActivity;
 import edu.tacoma.uw.dawggit.course.searchCourseActivity;

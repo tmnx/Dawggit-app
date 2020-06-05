@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-
 /**
  * Create a Course object that holds the information needed to add Course to remote
  * database.
@@ -25,7 +23,6 @@ import java.util.List;
  * @author Minh Nguyen
  */
 public class Course implements Serializable {
-
 
     /**
      * Course code

@@ -44,9 +44,9 @@ import edu.tacoma.uw.dawggit.main.HomeFragment;
 public class LogInFragment extends Fragment {
 
 
-    /**
-     * Used for firebase authorization.
-     */
+
+
+    /**Used for firebase authorization.*/
     private FirebaseAuth mAuth;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -129,7 +129,7 @@ public class LogInFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Objects.requireNonNull(getActivity()).setTitle("Log In");
-        View view = inflater.inflate(R.layout.fragment_log_in, container, false);
+        View view =  inflater.inflate(R.layout.fragment_log_in, container, false);
         mLoginFragmentListener = (LoginFragmentListenter) getActivity();
         final EditText emailText = view.findViewById(R.id.et_login_email);
         final EditText passwordText = view.findViewById(R.id.et_login_password);
@@ -194,6 +194,7 @@ public class LogInFragment extends Fragment {
                                         Toast.makeText(getContext(), "" + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 }
+                                    // if sign in fails, display message to the user                   
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -215,6 +216,10 @@ public class LogInFragment extends Fragment {
                         .commit();
             }
         });
+        registerButton.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.sign_in_fragment_id, new RegisterFragment(), "findThisFragment")
+                .addToBackStack(null)
+                .commit());
         return view;
     };
 }

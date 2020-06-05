@@ -36,7 +36,6 @@ import java.net.URL;
 import edu.tacoma.uw.dawggit.MainActivity;
 import edu.tacoma.uw.dawggit.R;
 
-
 /**
  * Allows user to add another course to the courses to be reviewed.
  */
@@ -133,7 +132,6 @@ public class CourseAddActivity extends AppCompatActivity {
                     + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     /**
      * Helper class to sync the app with the remote database.
