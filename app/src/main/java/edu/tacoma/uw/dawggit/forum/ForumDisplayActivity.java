@@ -219,7 +219,7 @@ public class ForumDisplayActivity extends AppCompatActivity {
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to add the new course, Reason: "
+                    response = "Unable to delete the forum, Reason: "
                             + e.getMessage();
                 } finally {
                     if (urlConnection != null)

@@ -12,4 +12,5 @@
     <string name="get_courses">https://dawggit.herokuapp.com/courses</string>
     <string name="delete_thread">https://dawggit.herokuapp.com/deletethread</string>
     <string name="delete_course">https://dawggit.herokuapp.com/deletecourse</string>
+    <string name="delete_review">https://dawggit.herokuapp.com/deletereview</string>
 </resources>
