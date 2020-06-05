@@ -2,6 +2,8 @@ package edu.tacoma.uw.dawggit.course;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +59,8 @@ public class CourseAddActivity extends AppCompatActivity {
         final EditText titleText = findViewById(R.id.editCourseTitle);
         final EditText infoText = findViewById(R.id.editCourseInfo);
 
+
+
         // Add course to database
         Button addButton = findViewById(R.id.addCourse);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +69,12 @@ public class CourseAddActivity extends AppCompatActivity {
                 String course_code = CIDtext.getText().toString();
                 String title = titleText.getText().toString();
                 String info = infoText.getText().toString();
-                Course course = new Course(course_code, title, info, "tmn1014@uw.edu");
+
+                // Get user email to compare to the user that created the course
+                SharedPreferences myPrefs = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
+                final String userEmail = myPrefs.getString(getString(R.string.USER_EMAIL), null);
+
+                Course course = new Course(course_code, title, info, userEmail);
                 addCourse(course);
 //                finish();
             }
