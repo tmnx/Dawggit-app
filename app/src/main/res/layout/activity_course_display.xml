@@ -31,6 +31,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:text="TextView"
+        android:textColor="@color/uwPurple"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +63,7 @@
         android:layout_marginRight="32dp"
         android:layout_marginBottom="395dp"
         android:text="TextView"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonAddReview"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,6 +80,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/addReviewText"
+        android:textColor="@color/uwPurple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -89,6 +92,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/viewReviews"
+        android:textColor="@color/uwPurple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
