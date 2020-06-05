@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -133,24 +134,33 @@ public class ReviewsContent extends AppCompatActivity {
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     Review review = mReviewList.get(position);
 
-                    AlertDialog alertDialog = new AlertDialog.Builder(ReviewsContent.this).create();
-                    alertDialog.setTitle("Are you sure you would like to delete this review?");
-                    alertDialog.setMessage("This cannot be undo.");
+                    // Get user email to compare to the user that created the course
+                    SharedPreferences myPrefs = getSharedPreferences(getString(R.string.USER_EMAIL), Context.MODE_PRIVATE);
+                    final String userEmail = myPrefs.getString(getString(R.string.USER_EMAIL), null);
+                    final String creatorEmail = review.getEmail();
 
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            deleteReview(review);
-                            finish();
-                            startActivity(getIntent());
-                        }
-                    });
 
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
+                    if (userEmail.equalsIgnoreCase(creatorEmail)) {
 
-                    alertDialog.show();
+                        AlertDialog alertDialog = new AlertDialog.Builder(ReviewsContent.this).create();
+                        alertDialog.setTitle("Are you sure you would like to delete this review?");
+                        alertDialog.setMessage("This cannot be undo.");
+
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteReview(review);
+                                finish();
+                                startActivity(getIntent());
+                            }
+                        });
+
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+
+                        alertDialog.show();
+                    }
                     return true;
                 }
             });
