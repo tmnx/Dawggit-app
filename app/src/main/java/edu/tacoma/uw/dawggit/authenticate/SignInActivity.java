@@ -40,6 +40,7 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
     /**This variable stores JSON information from GET/POST requests*/
     private JSONObject mUserJSON;
 
+
     private FirebaseAuth mAuth;
 
     /**
@@ -47,6 +48,8 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
      * Otherwise, the LogInFragment is launched and the user will have to login.
      * @param savedInstanceState null
      */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +85,6 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
 
 
 
-
     /**
      * A POST request will be sent to https://dawggit.herokuapp.com/login
      * to check if the user account exists.
@@ -91,6 +93,8 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
      */
     @Override
     public void login(String email, String pwd) {
+
+
         StringBuilder url = new StringBuilder(getString(R.string.post_login));
         mUserJSON = new JSONObject();
         try {
@@ -110,7 +114,7 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
             else {
                 Log.d("SignInActivity", "Firebase user is not valid");
             }
-            new LoginAsyncTask().execute(url.toString());
+            //new LoginAsyncTask().execute(url.toString());
         } catch(JSONException e) {
             Toast.makeText(this, "Error with JSON creation on logging in"
                     , Toast.LENGTH_SHORT).show();
@@ -126,6 +130,7 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
      */
     @Override
     public void registerNewAccount(String username, String email, String password) {
+
         StringBuilder url = new StringBuilder(getString(R.string.post_register));
         mUserJSON = new JSONObject();
         try {
@@ -284,8 +289,10 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
                     Toast.makeText(getApplicationContext(), jsonObject.getString("message")
                             , Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+
                     startActivity(i);
                     finish();
+
                 }
                 else {
                     Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();

@@ -7,17 +7,29 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +37,10 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
@@ -34,6 +48,10 @@ import edu.tacoma.uw.dawggit.course.Course;
 import edu.tacoma.uw.dawggit.course.CourseAddActivity;
 import edu.tacoma.uw.dawggit.course.CourseDB;
 import edu.tacoma.uw.dawggit.course.CourseDisplayActivity;
+
+import edu.tacoma.uw.dawggit.course.CourseDisplayActivity;
+import edu.tacoma.uw.dawggit.course.searchCourseActivity;
+
 
 /**
  * Displays course review posts to a user.
@@ -108,13 +126,24 @@ public class CourseReviewFragment extends Fragment {
                 launch();
             }
         });
+        Button searchButton = ve.findViewById(R.id.searchReviewButton);
 
+
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchTwo();
+            }
+        });
         return ve;
     }
 
-    /**
-     * Overrides on resume so the database is queried whenever something is added
-     */
+
+
+
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -353,4 +382,16 @@ public class CourseReviewFragment extends Fragment {
             }
         }
     }
+
+
+
+    /**
+     * Launch add course activity when user click add course button.
+     */
+    private void launchTwo() {
+        Intent intent = new Intent(getActivity(), searchCourseActivity.class);
+
+        startActivity(intent);
+    }
+
 }

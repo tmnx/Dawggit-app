@@ -46,9 +46,21 @@
             android:id="@+id/button_login_go_to_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+
             android:text="@string/button_login_register"
-            android:textColor="@color/uwPurple" />
+            android:textColor="@color/uwPurple"
+            android:layout_gravity="center" />
+        <Button
+            android:id="@+id/button_forgot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:layout_gravity="center"
+            android:textColor="@color/uwPurple"/>
+
+
+
+
 
     </LinearLayout>
 </FrameLayout>
