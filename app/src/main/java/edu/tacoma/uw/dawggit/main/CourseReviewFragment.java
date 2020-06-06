@@ -63,6 +63,9 @@ import edu.tacoma.uw.dawggit.course.searchCourseActivity;
  * A simple {@link Fragment} subclass.
  * Use the {@link CourseReviewFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * @author Minh Nguyen
+ * @version Sprint 2
  */
 public class CourseReviewFragment extends Fragment {
 

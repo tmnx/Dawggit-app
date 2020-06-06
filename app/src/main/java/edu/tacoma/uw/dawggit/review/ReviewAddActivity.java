@@ -38,6 +38,7 @@ import edu.tacoma.uw.dawggit.comment.CommentAddActivity;
  * is able to view reviews.
  *
  * @author Minh Nguyen
+ * @version Sprint 2
  */
 public class ReviewAddActivity extends AppCompatActivity {
 
@@ -54,6 +55,11 @@ public class ReviewAddActivity extends AppCompatActivity {
     /**Used to get the Current user's Email*/
     private SharedPreferences mSharedPreferences;
 
+    /**
+     * Initializes the vew (buttons) and set their functions.
+     *
+     * @param savedInstanceState saved Instance State
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Store information of a Review.
+ *
+ * @author Minh Nguyen
+ */
 public class Review implements Serializable {
 
     /**

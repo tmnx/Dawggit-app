@@ -16,6 +16,12 @@ import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
 
+/**
+ * Manages a local database.
+ *
+ * @author Minh Nguyen
+ * @version Sprint 2
+ */
 public class ReviewDB {
 
     /**

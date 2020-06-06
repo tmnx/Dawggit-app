@@ -44,6 +44,7 @@ import edu.tacoma.uw.dawggit.forum.ForumDisplayActivity;
  * Displays the reviews content.
  *
  * @author Minh Nguyen
+ * @version Sprint 2
  */
 public class ReviewsContent extends AppCompatActivity {
 
@@ -68,6 +69,7 @@ public class ReviewsContent extends AppCompatActivity {
     JSONObject mJson;
 
     /**
+     * Initializes the vew (buttons) and set their functions.
      *
      * @param savedInstanceState saved instance
      */
