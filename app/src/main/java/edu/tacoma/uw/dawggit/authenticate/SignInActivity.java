@@ -1,3 +1,8 @@
+/*
+ * TCSS 450 - Spring 2020
+ * Dawggit
+ * Team 6: Codie Bryan, Kevin Bui, Minh Nguyen, Sean Smith
+ */
 package edu.tacoma.uw.dawggit.authenticate;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,3 +1,8 @@
+/*
+ * TCSS 450 - Spring 2020
+ * Dawggit
+ * Team 6: Codie Bryan, Kevin Bui, Minh Nguyen, Sean Smith
+ */
 package edu.tacoma.uw.dawggit.listings;
 
 
@@ -5,6 +10,7 @@ package edu.tacoma.uw.dawggit.listings;
 import com.google.firebase.database.Exclude;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Represents an item a user wants to sell.
@@ -12,6 +18,20 @@ import java.util.Date;
  * @author Kevin Bui
  */
 public class ItemListing implements Serializable {
+
+    /**
+     * Email validation pattern.
+     */
+    public static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+    );
+
     /** The user's email who created this item listing.*/
     private String mUserEmail;
 
@@ -49,7 +69,25 @@ public class ItemListing implements Serializable {
      * @param date Date
      * @param url String
      */
-    ItemListing(String userEmail, String title, String textBody, Double price, Date date, String url) {
+    public ItemListing(String userEmail, String title, String textBody, Double price, Date date, String url) {
+        if(!isValidEmail(userEmail.trim())) {
+            throw new IllegalArgumentException("Invalid email");
+        }
+        if(title.isEmpty() || title.length() > 50) {
+            throw new IllegalArgumentException("Invalid title");
+        }
+        if(textBody.isEmpty() || textBody.length() > 255) {
+            throw new IllegalArgumentException("Invalid text body");
+        }
+        if(price < 0) { //\d{1,5}\.\d\d
+            throw new IllegalArgumentException("Invalid price");
+        }
+        if(date == null) {
+            throw new NullPointerException("Date is null");
+        }
+        if(url.isEmpty()) {
+            throw new IllegalArgumentException("No Image Url");
+        }
         this.mUserEmail = userEmail.trim();
         this.mTitle = title.trim();
         this.mTextBody = textBody.trim();
@@ -102,5 +140,15 @@ public class ItemListing implements Serializable {
      */
     @Exclude
     public void setKey(String key) {mKey = key;}
+
+    /**
+     * Validates if the given input is a valid email address.
+     *
+     * @param email The email to validate.
+     * @return {@code true} if the input is a valid email. {@code false} otherwise.
+     */
+    public static boolean isValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    }
 
 }

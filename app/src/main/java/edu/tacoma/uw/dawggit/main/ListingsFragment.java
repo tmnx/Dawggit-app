@@ -1,3 +1,8 @@
+/*
+ * TCSS 450 - Spring 2020
+ * Dawggit
+ * Team 6: Codie Bryan, Kevin Bui, Minh Nguyen, Sean Smith
+ */
 package edu.tacoma.uw.dawggit.main;
 
 import android.content.Intent;
@@ -41,6 +46,7 @@ import edu.tacoma.uw.dawggit.listings.ItemListingDetail;
  * Use the {@link ListingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  * @author Kevin Bui
+ * @version Sprint 2
  */
 public class ListingsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
