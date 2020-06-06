@@ -1,3 +1,8 @@
+/**
+ * TCSS450 Spring 2020 - Sprint 2
+ * Team 6
+ */
+
 package edu.tacoma.uw.dawggit;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -103,6 +108,61 @@ public class CourseAddTest {
     }
 
     /**
+     * Test the add course activity when there is only course code provided,
+     * but not enough to successfully add a course.
+     */
+    @Test
+    public void testAddOnlyCID() {
+        onView(withId(R.id.editCourseID))
+                .perform(typeText("TEST999"));
+
+        onView(withId(R.id.addCourse)).perform(click());
+
+        onView(withText("Course couldn't be added"))
+                .inRoot(withDecorView(not(is(mActivityRule
+                        .getActivity()
+                        .getWindow()
+                        .getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Test the add course activity when there is only course title provided,
+     * but not enough to successfully add a course.
+     */
+    @Test
+    public void testAddOnlyTitle() {
+
+        onView(withId(R.id.editCourseTitle))
+                .perform(typeText("Test Title"));
+
+        onView(withId(R.id.addCourse)).perform(click());
+
+        onView(withText("Course couldn't be added"))
+                .inRoot(withDecorView(not(is(mActivityRule
+                        .getActivity()
+                        .getWindow()
+                        .getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Test the add course activity when there is only course content provided,
+     * but not enough to successfully add a course.
+     */
+    @Test
+    public void testAddOnlyContent() {
+        onView(withId(R.id.editCourseInfo))
+                .perform(typeText("Course info test"));
+
+        onView(withId(R.id.addCourse)).perform(click());
+
+        onView(withText("Course couldn't be added"))
+                .inRoot(withDecorView(not(is(mActivityRule
+                        .getActivity()
+                        .getWindow()
+                        .getDecorView())))).check(matches(isDisplayed()));
+    }
+
+    /**
      * Try to add a course that already exist.
      * Course should not be added.
      */
@@ -130,7 +190,7 @@ public class CourseAddTest {
      * Check the close button. The activity should be finished.
      */
     @Test
-    public void testCloseButton() {
+    public void testCloseCourseButton() {
         onView(withId(R.id.closeAddCourse)).perform(click());
 
         assertTrue(mActivityRule.getActivity().isFinishing());

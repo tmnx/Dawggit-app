@@ -1,3 +1,8 @@
+/**
+ * TCSS450 Spring 2020 - Sprint 2
+ * Team 6
+ */
+
 package edu.tacoma.uw.dawggit.Forum;
 
 import android.content.Intent;
@@ -25,6 +30,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -159,7 +165,15 @@ public class ForumAddActivityTest {
 
     }
 
+    /**
+     * Check the close button. The activity should be finished.
+     */
+    @Test
+    public void testCloseForumButton() {
+        onView(withId(R.id.finish)).perform(click());
 
+        assertTrue(mActivityRule.getActivity().isFinishing());
+    }
 
 
 

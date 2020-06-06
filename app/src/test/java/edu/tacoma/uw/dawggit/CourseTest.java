@@ -1,3 +1,8 @@
+/**
+ * TCSS450 Spring 2020 - Sprint 2
+ * Team 6
+ */
+
 package edu.tacoma.uw.dawggit;
 
 import org.junit.Before;
