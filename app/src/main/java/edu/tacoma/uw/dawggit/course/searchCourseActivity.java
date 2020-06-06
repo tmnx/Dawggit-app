@@ -1,3 +1,7 @@
+/**
+ * TCSS 450 Mobile Application
+ * Team 6
+ **/
 package edu.tacoma.uw.dawggit.course;
 
 import androidx.appcompat.app.AlertDialog;
@@ -41,7 +45,9 @@ import edu.tacoma.uw.dawggit.R;
 import edu.tacoma.uw.dawggit.main.CourseReviewFragment;
 import edu.tacoma.uw.dawggit.review.ReviewsContent;
 
-
+/**
+ * Allows user to filter the course reviews to find the courses they want.
+ */
 public class searchCourseActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -52,6 +58,10 @@ public class searchCourseActivity extends AppCompatActivity {
     public static final String ARG_ITEM_ID = "course_item_id";
     private Course mCourse;
 
+    /**
+     * Initialize view and setup listeners for buttons.
+     * @param savedInstanceState Bundle
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +102,9 @@ public class searchCourseActivity extends AppCompatActivity {
 
 
 
+
+
+
     }
 
 
@@ -100,7 +113,9 @@ public class searchCourseActivity extends AppCompatActivity {
 
 
 
-
+    /**
+     * Refresh with the most updated comments.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -127,8 +142,14 @@ public class searchCourseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  Sets up the search bar.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
 
         getMenuInflater().inflate(R.menu.course_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);

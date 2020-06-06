@@ -44,6 +44,7 @@
         android:layout_marginRight="28dp"
         android:text="Search Course"
         android:textSize="14sp"
+        android:textColor="@color/uwPurple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

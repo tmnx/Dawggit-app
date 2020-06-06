@@ -114,7 +114,7 @@ public class SignInActivity extends AppCompatActivity  implements LogInFragment.
             else {
                 Log.d("SignInActivity", "Firebase user is not valid");
             }
-            new LoginAsyncTask().execute(url.toString());
+            //new LoginAsyncTask().execute(url.toString());
         } catch(JSONException e) {
             Toast.makeText(this, "Error with JSON creation on logging in"
                     , Toast.LENGTH_SHORT).show();

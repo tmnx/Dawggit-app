@@ -148,7 +148,7 @@ public class LogInFragment extends Fragment {
                 } else {
 
                     mAuth.sendPasswordResetEmail(emailText.getText().toString());
-                    Toast.makeText(v.getContext(), "Email Sent. Please cheack finbox."
+                    Toast.makeText(v.getContext(), "Email Sent. Please check email inbox."
                             , Toast.LENGTH_SHORT).show();
                     emailText.requestFocus();
 
@@ -180,11 +180,18 @@ public class LogInFragment extends Fragment {
                                         Toast.makeText(getContext(), "successful login", Toast.LENGTH_SHORT).show();
                                         FirebaseUser user = mAuth.getCurrentUser();
 
+
+
                                         // if email is verified, go to next activity.
                                         assert user != null;
                                         if (user.isEmailVerified()) {
-                                            mLoginFragmentListener.login(emailText.getText().toString(),
-                                                    passwordText.getText().toString());
+
+                                            Intent i = new Intent(getActivity(), HomeActivity.class);
+
+                                            startActivity(i);
+                                            getActivity().finish();
+                                            //mLoginFragmentListener.login(emailText.getText().toString(),
+                                                   // passwordText.getText().toString());
                                         } else { // login is successful, but account is not verified.
                                             Toast.makeText(getContext(), "Please verify account with email", Toast.LENGTH_SHORT).show();
                                         }

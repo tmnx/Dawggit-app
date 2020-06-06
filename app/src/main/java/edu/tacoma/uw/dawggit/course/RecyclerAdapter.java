@@ -1,5 +1,12 @@
+/**
+ * TCSS 450 Mobile Application
+ * Team 6
+**/
+
 package edu.tacoma.uw.dawggit.course;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +27,12 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.course.Course;
+import edu.tacoma.uw.dawggit.course.CourseDisplayActivity;
 
+/**
+ * Displays the course reviews and allows user to filter through them.
+ */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "RecyclerAdapter";
@@ -33,6 +45,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         courseListAll.addAll(this.courseList);
     }
 
+    /**
+     * Sets the layout of the search bar results.
+     * @param parent
+     * @param viewType
+     * @return ViewHolder
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,6 +60,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return viewHolder;
     }
 
+    /**
+     * Positions each course in the search bar results.
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //holder.mIdView.setText(courseList.get(position).getCourse_code());
@@ -55,11 +78,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
        // holder.textView.setText((CharSequence) courseList.get(position));
     }
 
+    /**
+     * Returns the number of elements in courselist
+     * @return the current count of items.
+     */
     @Override
     public int getItemCount() {
         return courseList.size();
     }
 
+    /**
+     * Returns the filter object.
+     * @return the filter.
+     */
     @Override
     public Filter getFilter() {
 
@@ -69,6 +100,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     Filter myFilter = new Filter() {
 
         //Automatic on background thread
+
+        /**
+         * Filters out the course list to what the user types in search bar.
+         * @param charSequence
+         * @return filter results of courses.
+         */
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
 
@@ -89,7 +126,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             return filterResults;
         }
 
-        //Automatic on UI thread
+        /**
+         * Automatically updates the course review list to the filter results.
+         * @param charSequence
+         * @param filterResults
+         */
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             courseList.clear();
@@ -97,6 +138,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             notifyDataSetChanged();
         }
     };
+
+
+
 
 
 
@@ -120,9 +164,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         }
 
+
+
+
+
+
         @Override
         public void onClick(View view) {
-            //Toast.makeText(view.getContext(), courseList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+
+                    Course item = (Course) view.getTag();
+
+                    Context context = view.getContext();
+                    // testing
+//                    Toast.makeText(context, "Course review clicked " + item.getCourse_code(), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, CourseDisplayActivity.class);
+                    intent.putExtra(CourseDisplayActivity.ARG_ITEM_ID, item);
+                    context.startActivity(intent);
+
+
         }
     }
 }
