@@ -29,10 +29,12 @@ import java.net.URL;
 import java.util.List;
 
 import edu.tacoma.uw.dawggit.R;
+import edu.tacoma.uw.dawggit.course.searchCourseActivity;
 import edu.tacoma.uw.dawggit.forum.Forum;
 import edu.tacoma.uw.dawggit.forum.ForumAddActivity;
 import edu.tacoma.uw.dawggit.forum.ForumDb;
 import edu.tacoma.uw.dawggit.forum.ForumDisplayActivity;
+import edu.tacoma.uw.dawggit.forum.SearchReviewActivity;
 
 /**
 * Displays forum posts to a user.
@@ -100,7 +102,27 @@ public class ForumFragment extends Fragment {
                 launch();
             }
         });
+
+        Button searchButton = ve.findViewById(R.id.searchReviewButton);
+
+
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchTwo();
+            }
+        });
         return ve;
+    }
+
+    /**
+     * Launch add course activity when user click add course button.
+     */
+    private void launchTwo() {
+        Intent intent = new Intent(getActivity(), SearchReviewActivity.class);
+
+        startActivity(intent);
     }
 
     /**

@@ -8,6 +8,7 @@
     tools:context=".main.CourseReviewFragment"
     android:id="@+id/frameLayout3" >
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/course_item_list"
         android:layout_width="358dp"
@@ -20,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/review_list_content" />
 
+
     <Button
         android:id="@+id/new_course"
         android:layout_width="wrap_content"
@@ -28,6 +30,20 @@
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
         android:text="@string/addCourseReview"
+        android:textColor="@color/uwPurple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/searchReviewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:text="Search Course"
+        android:textSize="14sp"
         android:textColor="@color/uwPurple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

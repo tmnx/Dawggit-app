@@ -12,12 +12,14 @@
         android:roundIcon="@drawable/dawggit"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".listings.ItemListingDetail"/>
-        <activity android:name=".listings.ItemListingAddActivity"/>
-        <activity android:name=".review.ReviewsContent"/>
+        <activity android:name=".forum.SearchReviewActivity"></activity>
+        <activity android:name=".listings.ItemListingDetail" />
+        <activity android:name=".listings.ItemListingAddActivity" />
+        <activity android:name=".review.ReviewsContent" />
         <activity android:name=".course.CourseAddActivity" />
         <activity android:name=".comment.CommentsContent" />
         <activity android:name=".course.CourseDisplayActivity" />
+        <activity android:name=".course.searchCourseActivity" />
         <activity android:name=".comment.CommentAddActivity" />
         <activity android:name=".review.ReviewAddActivity" />
         <activity android:name=".main.HomeActivity" />
@@ -30,8 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
