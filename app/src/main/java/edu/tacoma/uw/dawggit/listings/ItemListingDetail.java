@@ -1,3 +1,8 @@
+/*
+ * TCSS 450 - Spring 2020
+ * Dawggit
+ * Team 6: Codie Bryan, Kevin Bui, Minh Nguyen, Sean Smith
+ */
 package edu.tacoma.uw.dawggit.listings;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -5,17 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import edu.tacoma.uw.dawggit.R;
