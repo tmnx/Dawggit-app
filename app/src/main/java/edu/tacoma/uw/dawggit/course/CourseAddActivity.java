@@ -27,6 +27,9 @@ import edu.tacoma.uw.dawggit.R;
 
 /**
  * Allows user to add another course to the courses to be reviewed.
+ *
+ * @author Minh Nguyen
+ * @version Sprint 2
  */
 public class CourseAddActivity extends AppCompatActivity {
 

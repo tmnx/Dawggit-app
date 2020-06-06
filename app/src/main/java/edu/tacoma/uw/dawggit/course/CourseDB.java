@@ -13,6 +13,8 @@ import edu.tacoma.uw.dawggit.R;
 
 /**
  * Create a local Course database.
+ *
+ * @author Minh Nguyen
  */
 public class CourseDB {
 

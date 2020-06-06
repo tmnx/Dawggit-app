@@ -35,6 +35,9 @@ import edu.tacoma.uw.dawggit.review.ReviewsContent;
  *  - delete course
  *  - view reviews
  *  - add review
+ *
+ *  @author Minh Nguyen
+ * @version Sprint 2
  */
 public class CourseDisplayActivity extends AppCompatActivity {
 
